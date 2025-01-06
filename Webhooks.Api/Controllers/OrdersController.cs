@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Webhooks.Api.Data;
 using Webhooks.Api.Models;
-using Webhooks.Api.Repositories;
 using Webhooks.Api.Services;
 
 namespace Webhooks.Api.Controllers;
@@ -9,17 +10,19 @@ namespace Webhooks.Api.Controllers;
 [ApiController]
 public class OrdersController : ControllerBase
 {
-    private readonly InMemoryOrderRepository _orderRepository;
+    private readonly WebhooksDbContext _context;
     private readonly WebhookDispatcher _webhookDispatcher;
-    public OrdersController(InMemoryOrderRepository orderRepository, WebhookDispatcher webhookDispatcher)
+
+    public OrdersController(WebhooksDbContext context, WebhookDispatcher webhookDispatcher)
     {
-        _orderRepository = orderRepository;
+        _context = context;
         _webhookDispatcher = webhookDispatcher;
     }
+
     [HttpGet]
-    public IActionResult GetAllOrders()
+    public async Task<IActionResult> GetAllOrders()
     {
-        var orders = _orderRepository.GetAll();
+        var orders = await _context.Orders.ToListAsync();
         return Ok(orders);
     }
 
@@ -32,7 +35,7 @@ public class OrdersController : ControllerBase
             request.Amount,
             DateTime.UtcNow);
 
-        _orderRepository.Add(order);
+        _context.Orders.Add(order);
 
         await _webhookDispatcher.DispatchAsync("order.created", order);
         return Ok(order);

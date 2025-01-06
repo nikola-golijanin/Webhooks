@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
+using Webhooks.Api.Data;
 using Webhooks.Api.Models;
-using Webhooks.Api.Repositories;
 
 namespace Webhooks.Api.Controllers;
 
@@ -8,12 +8,11 @@ namespace Webhooks.Api.Controllers;
 [ApiController]
 public class WebhooksController : ControllerBase
 {
+    private readonly WebhooksDbContext _context;
 
-    private readonly InMemoryWebhookSubscriptionRepository _webhookSubscriptionRepository;
-
-    public WebhooksController(InMemoryWebhookSubscriptionRepository webhookSubscriptionRepository)
+    public WebhooksController(WebhooksDbContext context)
     {
-        _webhookSubscriptionRepository = webhookSubscriptionRepository;
+        _context = context;
     }
 
     [HttpPost("subscriptions")]
@@ -25,7 +24,8 @@ public class WebhooksController : ControllerBase
             request.WebhookUrl,
             DateTime.UtcNow);
 
-        _webhookSubscriptionRepository.Add(subscription);
+        _context.WebhookSubscriptions.Add(subscription);
+        _context.SaveChanges();
         return Ok(subscription);
     }
 }

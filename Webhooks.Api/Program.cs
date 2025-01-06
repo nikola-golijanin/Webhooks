@@ -1,4 +1,6 @@
-using Webhooks.Api.Repositories;
+using Microsoft.EntityFrameworkCore;
+using Webhooks.Api.Data;
+using Webhooks.Api.Extensions;
 using Webhooks.Api.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -11,11 +13,12 @@ builder.Services.AddEndpointsApiExplorer();
 
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddSingleton<InMemoryOrderRepository>();
+builder.Services.AddHttpClient();
 
-builder.Services.AddSingleton<InMemoryWebhookSubscriptionRepository>();
+builder.Services.AddScoped<WebhookDispatcher>();
 
-builder.Services.AddHttpClient<WebhookDispatcher>();
+builder.Services.AddDbContext<WebhooksDbContext>(options =>
+    options.UseNpgsql(builder.Configuration.GetConnectionString("PostgresConnection")));
 
 var app = builder.Build();
 
@@ -24,6 +27,7 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
+    await app.ApplyMigrationAsync();
 }
 
 app.UseHttpsRedirection();
