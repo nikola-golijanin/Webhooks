@@ -1,0 +1,22 @@
+﻿services:
+  webhooks.api:
+    image: webhooks.api
+    build:
+      context: .
+      dockerfile: Webhooks.Api/Dockerfile
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__PostgresConnection=Host=postgres;Database=WebhooksDb;Username=postgres;Password=postgres
+    depends_on:
+      - postgres
+    ports: 
+      - "8080:8080"
+      - "7144:7144"
+  postgres:
+    image: postgres:latest
+    environment:
+      POSTGRES_DB: WebhooksDb
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
