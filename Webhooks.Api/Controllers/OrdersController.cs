@@ -38,6 +38,8 @@ public class OrdersController : ControllerBase
 
         _context.Orders.Add(order);
 
+        await _context.SaveChangesAsync();
+        
         await _webhookDispatcher.DispatchAsync("order.created", order);
         return Ok(order);
     }
