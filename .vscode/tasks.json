@@ -92,9 +92,6 @@
                     }
                 ]
             },
-            "env": {
-                "ASPNETCORE_URLS": "https://+:7144;http://+:5260"
-            },
             "netCore": {
                 "appProject": "${workspaceFolder}/Webhooks.Api/Webhooks.Api.csproj",
                 "enableDebugging": true
