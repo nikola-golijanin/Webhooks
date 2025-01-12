@@ -27,7 +27,7 @@ public sealed class WebhookDispatcher
 
         using var httpClient = _httpClientFactory.CreateClient();
 
-        foreach (WebhookSubscription subscription in subscriptions)
+        foreach (var subscription in subscriptions)
         {
             var payload = new WebhookPayload<T>
             {
