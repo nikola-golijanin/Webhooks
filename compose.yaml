@@ -22,3 +22,13 @@
       - ./.containers/database:/var/lib/postgresql/data
     ports:
       - "5432:5432"
+  seq:
+    image: datalust/seq:latest
+    container_name: webhooks.seq
+    volumes:
+      - ./.containers/seq:/data
+    environment:
+      - ACCEPT_EULA=Y
+    ports:
+      - 5431:5431
+      - 8081:80

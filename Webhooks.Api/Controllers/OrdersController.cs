@@ -13,11 +13,16 @@ public class OrdersController : ControllerBase
 {
     private readonly WebhooksDbContext _context;
     private readonly WebhookDispatcher _webhookDispatcher;
+    private readonly ILogger<OrdersController> _logger;
 
-    public OrdersController(WebhooksDbContext context, WebhookDispatcher webhookDispatcher)
+    public OrdersController(
+        WebhooksDbContext context, 
+        WebhookDispatcher webhookDispatcher, 
+        ILogger<OrdersController> logger)
     {
         _context = context;
         _webhookDispatcher = webhookDispatcher;
+        _logger = logger;
     }
 
     [HttpGet]
@@ -39,6 +44,7 @@ public class OrdersController : ControllerBase
         _context.Orders.Add(order);
 
         await _context.SaveChangesAsync();
+        _logger.LogInformation("Order created. {OrderId}, {CustomerName}, {Amount}",order.Id,order.CustomerName, order.Amount);
         
         await _webhookDispatcher.DispatchAsync("order.created", order);
         return Ok(order);
