@@ -3,6 +3,7 @@ using Webhooks.Api.Data;
 using Webhooks.Api.Extensions;
 using Webhooks.Api.Services;
 using Serilog;
+using System.Threading.Channels;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -23,10 +24,20 @@ builder.Services.AddScoped<WebhookDispatcher>();
 builder.Services.AddDbContext<WebhooksDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("PostgresConnection")));
 
+builder.Services.AddHostedService<WebhookProcessor>();
+
+builder.Services.AddSingleton(_ =>
+{
+    return Channel.CreateBounded<WebhookDispatch>(new BoundedChannelOptions(100)
+    {
+        FullMode = BoundedChannelFullMode.Wait
+    });
+});
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+if (app.Environment.IsDevelopment() || app.Environment.EnvironmentName == "Docker")
 {
     app.UseSwagger();
     app.UseSwaggerUI();
