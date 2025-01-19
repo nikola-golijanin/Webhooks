@@ -51,14 +51,14 @@ public sealed class WebhookDispatcher
             {
                 var response = await httpClient.PostAsJsonAsync(subscription.WebhookUrl, jsonPayload);
                 var attempt = new WebhookDeliveryAttempt
-                {
-                    Id = Guid.NewGuid(),
-                    WebhookSubscriptionId = subscription.Id,
-                    Payload = jsonPayload,
-                    ReponseStatusCode = (int)response.StatusCode,
-                    Success = response.IsSuccessStatusCode,
-                    Timestamp = DateTime.UtcNow
-                };
+                (
+                    Id: Guid.NewGuid(),
+                    WebhookSubscriptionId: subscription.Id,
+                    Payload: jsonPayload,
+                    ReponseStatusCode: (int)response.StatusCode,
+                    Success: response.IsSuccessStatusCode,
+                    Timestamp: DateTime.UtcNow
+                );
 
                 _context.WebhookDeliveryAttempts.Add(attempt);
                 await _context.SaveChangesAsync();
@@ -66,14 +66,15 @@ public sealed class WebhookDispatcher
             catch (Exception)
             {
                 var attempt = new WebhookDeliveryAttempt
-                {
-                    Id = Guid.NewGuid(),
-                    WebhookSubscriptionId = subscription.Id,
-                    Payload = jsonPayload,
-                    ReponseStatusCode = null,
-                    Success = false,
-                    Timestamp = DateTime.UtcNow
-                };
+                (
+                    Id: Guid.NewGuid(),
+                    WebhookSubscriptionId: subscription.Id,
+                    Payload: jsonPayload,
+                    ReponseStatusCode: null,
+                    Success: false,
+                    Timestamp: DateTime.UtcNow
+
+                );
 
                 _context.WebhookDeliveryAttempts.Add(attempt);
                 await _context.SaveChangesAsync();

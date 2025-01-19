@@ -1,17 +1,9 @@
 namespace Webhooks.Api.Models;
 
-public class WebhookDeliveryAttempt
-{
-
-    public Guid Id { get; set; }
-
-    public Guid WebhookSubscriptionId { get; set; }
-
-    public string Payload { get; set; }
-
-    public int? ReponseStatusCode { get; set; }
-
-    public bool Success { get; set; }
-
-    public DateTime Timestamp { get; set; }
-}
+public record WebhookDeliveryAttempt(
+    Guid Id,
+    Guid WebhookSubscriptionId,
+    string Payload,
+    int? ReponseStatusCode,
+    bool Success,
+    DateTime Timestamp);
