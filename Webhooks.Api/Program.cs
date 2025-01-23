@@ -4,6 +4,7 @@ using Webhooks.Api.Extensions;
 using Webhooks.Api.Services;
 using Serilog;
 using System.Threading.Channels;
+using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,11 +12,11 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Host.UseSerilog((context, loggerConfig) =>
     loggerConfig.ReadFrom.Configuration(context.Configuration));
 
+builder.Services.AddOpenApi();
+
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-
-builder.Services.AddSwaggerGen();
 
 builder.Services.AddHttpClient();
 
@@ -39,8 +40,14 @@ var app = builder.Build();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment() || app.Environment.EnvironmentName == "Docker")
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
+    app.MapOpenApi();
+    app.MapScalarApiReference(
+        options =>
+        {
+            options.Title = "Webhooks API";
+            options.DotNetFlag = true;
+        }
+    );
     await app.ApplyMigrationAsync();
 }
 
