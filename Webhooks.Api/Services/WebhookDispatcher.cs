@@ -55,7 +55,7 @@ public sealed class WebhookDispatcher
                     Id: Guid.NewGuid(),
                     WebhookSubscriptionId: subscription.Id,
                     Payload: jsonPayload,
-                    ReponseStatusCode: (int)response.StatusCode,
+                    ResponseStatusCode: (int)response.StatusCode,
                     Success: response.IsSuccessStatusCode,
                     Timestamp: DateTime.UtcNow
                 );
@@ -70,7 +70,7 @@ public sealed class WebhookDispatcher
                     Id: Guid.NewGuid(),
                     WebhookSubscriptionId: subscription.Id,
                     Payload: jsonPayload,
-                    ReponseStatusCode: null,
+                    ResponseStatusCode: null,
                     Success: false,
                     Timestamp: DateTime.UtcNow
 

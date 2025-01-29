@@ -4,6 +4,6 @@ public record WebhookDeliveryAttempt(
     Guid Id,
     Guid WebhookSubscriptionId,
     string Payload,
-    int? ReponseStatusCode,
+    int? ResponseStatusCode,
     bool Success,
     DateTime Timestamp);
