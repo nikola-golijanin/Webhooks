@@ -1,0 +1,14 @@
+{
+  "name": "Rider Dev Container",
+  "image": "mcr.microsoft.com/devcontainers/dotnet:9.0", 
+  "features": {},
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-vscode-remote.remote-containers"
+      ]
+    }
+  },
+  "forwardPorts": [5000, 5001],
+  "postCreateCommand": "dotnet --version"
+}
