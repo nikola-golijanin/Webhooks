@@ -9,6 +9,6 @@
       ]
     }
   },
-  "forwardPorts": [5000, 5001],
+  "forwardPorts": [5000, 5001, 22],
   "postCreateCommand": "dotnet --version"
 }
