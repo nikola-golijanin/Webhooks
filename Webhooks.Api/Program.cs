@@ -1,10 +1,11 @@
 using Microsoft.EntityFrameworkCore;
 using Webhooks.Api.Data;
 using Webhooks.Api.Extensions;
-using Webhooks.Api.Services;
 using Serilog;
-using System.Threading.Channels;
 using Scalar.AspNetCore;
+using MassTransit;
+using Webhooks.Api.Services.Consumers;
+using Webhooks.Api.Services.Publishers;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -25,13 +26,22 @@ builder.Services.AddScoped<WebhookDispatcher>();
 builder.Services.AddDbContext<WebhooksDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("PostgresConnection")));
 
-builder.Services.AddHostedService<WebhookProcessor>();
-
-builder.Services.AddSingleton(_ =>
+builder.Services.AddMassTransit(busConfig =>
 {
-    return Channel.CreateBounded<WebhookDispatch>(new BoundedChannelOptions(100)
+    busConfig.SetKebabCaseEndpointNameFormatter();
+
+    busConfig.AddConsumer<WebhookDispatchedConsumer>();
+    busConfig.AddConsumer<WebhookTriggeredConsumer>();
+
+    busConfig.UsingRabbitMq((context, config) =>
     {
-        FullMode = BoundedChannelFullMode.Wait
+        config.Host(new Uri(builder.Configuration["RabbitMQ:Host"]!), host =>
+        {
+            host.Username(builder.Configuration["RabbitMQ:Username"]!);
+            host.Password(builder.Configuration["RabbitMQ:Password"]!);
+        });
+
+        config.ConfigureEndpoints(context);
     });
 });
 

@@ -5,15 +5,26 @@
       context: .
       dockerfile: Webhooks.Api/Dockerfile
     environment:
+      # Web App Env
       - ASPNETCORE_ENVIRONMENT=Docker
-      - ConnectionStrings__PostgresConnection=Host=postgres;Database=WebhooksDb;Username=postgres;Password=postgres
+      # Postgres Connection
+      - ConnectionStrings__PostgresConnection=Host=webhooks.db;Database=WebhooksDb;Username=postgres;Password=postgres
+      # RabbitMQ Connection
+      - RabbitMQ__Host=amqp://webhooks.mq:5672
+      - RabbitMQ__Username=guest
+      - RabbitMQ__Password=guest
+      # Aspire Dashboard
+      - OTEL_EXPORTER_OTLP_ENDPOINT=grpc://webhooks.aspire-dashboard:4317
+      - OTEL_EXPORTER_OTLP_PROTOCOL=grpc
     depends_on:
-      - postgres
+      - webhooks.db 
+      - webhooks.mq
     ports: 
       - "8080:8080"
       - "7144:7144"
-  postgres:
+  webhooks.db:
     image: postgres:latest
+    hostname: webhooks.db
     environment:
       POSTGRES_DB: WebhooksDb
       POSTGRES_USER: postgres
@@ -22,7 +33,7 @@
       - ./.containers/database:/var/lib/postgresql/data
     ports:
       - "5432:5432"
-  seq:
+  webhooks.seq:
     image: datalust/seq:latest
     container_name: webhooks.seq
     volumes:
@@ -32,3 +43,23 @@
     ports:
       - 5431:5431
       - 8081:80
+  webhooks.mq:
+    image: rabbitmq:3-management
+    container_name: webhooks.mq
+    hostname: webhooks.mq
+    volumes:
+      - ./.containers/queue:/var/lib/rabbitmq
+      - ./.containers/queue:/var/log/rabbitmq
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+  webhooks.aspire-dashboard:
+    image: mcr.microsoft.com/dotnet/aspire-dashboard:9.0
+    environment:
+      DOTNET_DASHBOARD_UNSECURED_ALLOW_ANONYMOUS: true
+    ports:
+      - 18888:18888
+      - 4317:18889

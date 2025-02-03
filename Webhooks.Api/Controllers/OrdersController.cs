@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Webhooks.Api.Contracts.Orders;
 using Webhooks.Api.Data;
 using Webhooks.Api.Models;
-using Webhooks.Api.Services;
+using Webhooks.Api.Services.Publishers;
 
 namespace Webhooks.Api.Controllers;
 
@@ -16,8 +16,8 @@ public class OrdersController : ControllerBase
     private readonly ILogger<OrdersController> _logger;
 
     public OrdersController(
-        WebhooksDbContext context, 
-        WebhookDispatcher webhookDispatcher, 
+        WebhooksDbContext context,
+        WebhookDispatcher webhookDispatcher,
         ILogger<OrdersController> logger)
     {
         _context = context;
@@ -44,8 +44,8 @@ public class OrdersController : ControllerBase
         _context.Orders.Add(order);
 
         await _context.SaveChangesAsync();
-        _logger.LogInformation("Order created. {OrderId}, {CustomerName}, {Amount}",order.Id,order.CustomerName, order.Amount);
-        
+        _logger.LogInformation("Order created. {OrderId}, {CustomerName}, {Amount}", order.Id, order.CustomerName, order.Amount);
+
         await _webhookDispatcher.DispatchAsync("order.created", order);
         return Ok(order);
     }
