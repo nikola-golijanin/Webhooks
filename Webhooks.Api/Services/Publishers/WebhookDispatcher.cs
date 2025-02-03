@@ -1,4 +1,5 @@
 using MassTransit;
+using Webhooks.Api.Models.Events;
 
 namespace Webhooks.Api.Services.Publishers;
 public sealed class WebhookDispatcher

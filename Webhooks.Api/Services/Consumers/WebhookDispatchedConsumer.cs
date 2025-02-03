@@ -1,6 +1,7 @@
 using MassTransit;
 using Microsoft.EntityFrameworkCore;
 using Webhooks.Api.Data;
+using Webhooks.Api.Models.Events;
 
 namespace Webhooks.Api.Services.Consumers;
 
