@@ -1,11 +1,5 @@
-using Microsoft.EntityFrameworkCore;
-using Webhooks.Api.Data;
-using Webhooks.Api.Extensions;
 using Serilog;
-using Scalar.AspNetCore;
-using MassTransit;
-using Webhooks.Api.Services.Consumers;
-using Webhooks.Api.Services.Publishers;
+using Webhooks.Api.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -21,43 +15,17 @@ builder.Services.AddEndpointsApiExplorer();
 
 builder.Services.AddHttpClient();
 
-builder.Services.AddScoped<WebhookDispatcher>();
-
-builder.Services.AddDbContext<WebhooksDbContext>(options =>
-    options.UseNpgsql(builder.Configuration.GetConnectionString("PostgresConnection")));
-
-builder.Services.AddMassTransit(busConfig =>
-{
-    busConfig.SetKebabCaseEndpointNameFormatter();
-
-    busConfig.AddConsumer<WebhookDispatchedConsumer>();
-    busConfig.AddConsumer<WebhookTriggeredConsumer>();
-
-    busConfig.UsingRabbitMq((context, config) =>
-    {
-        config.Host(new Uri(builder.Configuration["RabbitMQ:Host"]!), host =>
-        {
-            host.Username(builder.Configuration["RabbitMQ:Username"]!);
-            host.Password(builder.Configuration["RabbitMQ:Password"]!);
-        });
-
-        config.ConfigureEndpoints(context);
-    });
-});
+builder.Services.AddServices();
+builder.Services.AddDatabaseContext(builder.Configuration);
+builder.Services.AddMassTransitServices(builder.Configuration);
 
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment() || app.Environment.EnvironmentName == "Docker")
+if (app.Environment.IsDevelopment() || app.Environment.IsDocker())
 {
     app.MapOpenApi();
-    app.MapScalarApiReference(
-        options =>
-        {
-            options.Title = "Webhooks API";
-            options.DotNetFlag = true;
-        }
-    );
+    app.AddScalarUi();
     await app.ApplyMigrationAsync();
 }
 
