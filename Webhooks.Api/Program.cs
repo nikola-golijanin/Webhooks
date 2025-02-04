@@ -4,19 +4,22 @@ using Webhooks.Api.Extensions;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Host.UseSerilog((context, loggerConfig) =>
-    loggerConfig.ReadFrom.Configuration(context.Configuration));
+builder.AddSerilog();
 
 builder.Services.AddOpenApi();
 
 builder.Services.AddControllers();
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+// TODO: Check if this is necessary
 builder.Services.AddEndpointsApiExplorer();
 
 builder.Services.AddHttpClient();
 
 builder.Services.AddServices();
+
 builder.Services.AddDatabaseContext(builder.Configuration);
+
 builder.Services.AddMassTransitServices(builder.Configuration);
 
 var app = builder.Build();

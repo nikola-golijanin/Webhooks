@@ -1,5 +1,6 @@
 ﻿using MassTransit;
 using Microsoft.EntityFrameworkCore;
+using Serilog;
 using Webhooks.Api.Data;
 using Webhooks.Api.Services.Consumers;
 using Webhooks.Api.Services.Publishers;
@@ -8,6 +9,18 @@ namespace Webhooks.Api.Extensions;
 
 public static class ServiceCollectionExtensions
 {
+    /// <summary>
+    ///     Configures and registers Serilog as the logging provider for the application.
+    ///     Reads logging configuration from the application's configuration settings.
+    /// </summary>
+    /// <param name="builder">The WebApplicationBuilder instance.</param>
+    public static void AddSerilog(this WebApplicationBuilder builder)
+    {
+        builder.Host.UseSerilog((context, loggerConfig) =>
+            loggerConfig.ReadFrom.Configuration(context.Configuration));
+    }
+
+
     /// <summary>
     ///     Registers application services into the dependency injection container.
     /// </summary>
