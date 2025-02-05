@@ -10,8 +10,6 @@ builder.Services.AddOpenApi();
 
 builder.Services.AddControllers();
 
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-// TODO: Check if this is necessary
 builder.Services.AddEndpointsApiExplorer();
 
 builder.Services.AddHttpClient();
