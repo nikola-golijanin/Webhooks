@@ -20,6 +20,8 @@ builder.Services.AddDatabaseContext(builder.Configuration);
 
 builder.Services.AddMassTransitServices(builder.Configuration);
 
+builder.Services.AddOpenTelemetryTracingAndMetrics();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

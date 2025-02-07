@@ -1,5 +1,8 @@
 ﻿using MassTransit;
 using Microsoft.EntityFrameworkCore;
+using OpenTelemetry.Metrics;
+using OpenTelemetry.Resources;
+using OpenTelemetry.Trace;
 using Serilog;
 using Webhooks.Api.Data;
 using Webhooks.Api.Services.Consumers;
@@ -68,5 +71,43 @@ public static class ServiceCollectionExtensions
                 config.ConfigureEndpoints(context);
             });
         });
+    }
+
+    /// <summary>
+    /// Configures OpenTelemetry tracing and metrics for the application.
+    /// </summary>
+    /// <param name="services">The IServiceCollection to add the OpenTelemetry services to.</param>
+    /// <remarks>
+    /// This method sets up OpenTelemetry for tracing and metrics with the following configurations:
+    /// <list type="bullet">
+    /// <item>
+    /// <description>Adds a resource with the service name "Webhooks.Api".</description>
+    /// </item>
+    /// <item>
+    /// <description>Configures tracing with ASP.NET Core and HTTP client instrumentation, and adds an OTLP exporter.</description>
+    /// </item>
+    /// <item>
+    /// <description>Configures metrics with ASP.NET Core and HTTP client instrumentation, and adds an OTLP exporter.</description>
+    /// </item>
+    /// </list>
+    /// </remarks>
+    public static void AddOpenTelemetryTracingAndMetrics(this IServiceCollection services)
+    {
+        services.AddOpenTelemetry()
+            .ConfigureResource(resource => resource.AddService("Webhooks.Api"))
+            .WithTracing(tracing =>
+            {
+                tracing.AddAspNetCoreInstrumentation()
+                       .AddHttpClientInstrumentation();
+
+                tracing.AddOtlpExporter();
+            })
+            .WithMetrics(metrics =>
+            {
+                metrics.AddAspNetCoreInstrumentation()
+                        .AddHttpClientInstrumentation();
+
+                metrics.AddOtlpExporter();
+            });
     }
 }
