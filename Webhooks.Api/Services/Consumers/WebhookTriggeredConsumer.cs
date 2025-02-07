@@ -1,4 +1,3 @@
-
 using System.Text.Json;
 using MassTransit;
 using Webhooks.Api.Data;
@@ -11,13 +10,16 @@ internal sealed class WebhookTriggeredConsumer : IConsumer<WebhookTriggered>
 {
     private readonly IHttpClientFactory _httpClientFactory;
     private readonly WebhooksDbContext _context;
-
+    private readonly ILogger<WebhookTriggeredConsumer> _logger;
+    
     public WebhookTriggeredConsumer(
         IHttpClientFactory httpClientFactory,
-        WebhooksDbContext context)
+        WebhooksDbContext context, 
+        ILogger<WebhookTriggeredConsumer> logger)
     {
         _httpClientFactory = httpClientFactory;
         _context = context;
+        _logger = logger;
     }
 
     public async Task Consume(ConsumeContext<WebhookTriggered> context)
@@ -41,6 +43,11 @@ internal sealed class WebhookTriggeredConsumer : IConsumer<WebhookTriggered>
         {
             var response = await httpClient.PostAsJsonAsync(message.WebhookUrl, jsonPayload);
             response.EnsureSuccessStatusCode();
+            
+            _logger.LogInformation("Webhook delivery to {WebhookUrl} successful. {SubscriptionId}, {StatusCode}", 
+                message.WebhookUrl,
+                message.SubscriptionId,
+                response.StatusCode);
 
             var attempt = new WebhookDeliveryAttempt
             (
@@ -51,11 +58,11 @@ internal sealed class WebhookTriggeredConsumer : IConsumer<WebhookTriggered>
                 Success: response.IsSuccessStatusCode,
                 Timestamp: DateTime.UtcNow
             );
-
+            
             _context.WebhookDeliveryAttempts.Add(attempt);
             await _context.SaveChangesAsync();
         }
-        catch (Exception)
+        catch (Exception ex)
         {
             var attempt = new WebhookDeliveryAttempt
             (
@@ -67,7 +74,11 @@ internal sealed class WebhookTriggeredConsumer : IConsumer<WebhookTriggered>
                 Timestamp: DateTime.UtcNow
 
             );
-
+            
+            _logger.LogError(ex,"Webhook delivery to {WebhookUrl} failed. {SubscriptionId}",
+                message.WebhookUrl,
+                message.SubscriptionId);
+            
             _context.WebhookDeliveryAttempts.Add(attempt);
             await _context.SaveChangesAsync();
         }
