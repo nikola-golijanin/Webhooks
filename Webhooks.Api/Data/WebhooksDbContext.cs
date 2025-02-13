@@ -9,6 +9,7 @@ public sealed class WebhooksDbContext : DbContext
     {
     }
 
+    public DbSet<User> Users { get; set; }
     public DbSet<Order> Orders { get; set; }
     public DbSet<WebhookSubscription> WebhookSubscriptions { get; set; }
     public DbSet<WebhookDeliveryAttempt> WebhookDeliveryAttempts { get; set; }
@@ -19,6 +20,12 @@ public sealed class WebhooksDbContext : DbContext
         {
             builder.ToTable("orders");
             builder.HasKey(o => o.Id);
+        });
+
+        modelBuilder.Entity<User>(builder =>
+        {
+            builder.ToTable("users");
+            builder.HasKey(u => u.Id);
         });
 
         modelBuilder.Entity<WebhookSubscription>(builder =>
