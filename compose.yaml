@@ -32,7 +32,7 @@
     volumes:
       - ./.containers/database:/var/lib/postgresql/data
     ports:
-      - "5432:5432"
+      - "54320:5432" # Changed port to avoid conflict with local postgres
       
   webhooks.seq:
     image: datalust/seq:latest
