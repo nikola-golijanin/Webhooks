@@ -1,5 +1,7 @@
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Serilog;
 using Webhooks.Api.Extensions;
+using Webhooks.Api.Services.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,6 +24,16 @@ builder.Services.AddMassTransitServices(builder.Configuration);
 
 builder.Services.AddOpenTelemetryTracingAndMetrics();
 
+builder.Services.AddScoped<UserService>();
+
+builder.Services.AddScoped<JwtProvider>();
+
+builder.Services.ConfigureOptions<JwtOptionsSetup>();
+builder.Services.ConfigureOptions<JwtBearerOptionsSetup>();
+
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -33,6 +45,8 @@ if (app.Environment.IsDevelopment() || app.Environment.IsDocker())
 }
 
 app.UseHttpsRedirection();
+
+app.UseAuthentication();
 
 app.UseAuthorization();
 
