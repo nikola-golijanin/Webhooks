@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using Webhooks.Api.Authentication;
 using Webhooks.Api.Contracts.Users;
 using Webhooks.Api.Data;
 using Webhooks.Api.Models;
@@ -26,6 +27,5 @@ public class UserService
         
         var token = _jwtProvider.Generate(user);
         return token;
-
     }
 }

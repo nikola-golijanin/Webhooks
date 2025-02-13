@@ -1,5 +1,7 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Serilog;
+using Webhooks.Api.Authentication;
+using Webhooks.Api.Authentication.OptionsSetup;
 using Webhooks.Api.Extensions;
 using Webhooks.Api.Services.Identity;
 

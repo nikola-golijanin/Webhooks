@@ -5,7 +5,7 @@ using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Webhooks.Api.Models;
 
-namespace Webhooks.Api.Services.Identity;
+namespace Webhooks.Api.Authentication;
 
 public sealed class JwtProvider
 {
