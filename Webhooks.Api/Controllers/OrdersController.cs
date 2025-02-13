@@ -1,10 +1,12 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Webhooks.Api.Authentication;
 using Webhooks.Api.Contracts.Orders;
 using Webhooks.Api.Data;
 using Webhooks.Api.Models;
 using Webhooks.Api.Services.Publishers;
+using Permission = Webhooks.Api.Authentication.Permission;
 
 namespace Webhooks.Api.Controllers;
 
@@ -28,7 +30,7 @@ public class OrdersController : ControllerBase
     }
 
     [HttpGet]
-    //[HasPermission(Permission.ReadOrders)]
+    [HasPermission(Permission.ReadOrders)]
     [Authorize]
     public async Task<IActionResult> GetAllOrders()
     {

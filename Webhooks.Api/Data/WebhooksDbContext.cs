@@ -26,10 +26,10 @@ public sealed class WebhooksDbContext : DbContext
             builder.HasMany(r => r.Permissions)
                 .WithMany()
                 .UsingEntity<RolePermission>();
-            
+
             builder.HasMany(r => r.Users)
-                .WithMany()
-                .UsingEntity<RoleUser>();
+                .WithMany(u => u.Roles)
+                .UsingEntity(e => e.ToTable("role_users"));
 
             builder.HasData(Role.Registered);
         });
@@ -53,14 +53,6 @@ public sealed class WebhooksDbContext : DbContext
             builder.HasKey(rp => new { rp.RoleId, rp.PermissionId });
             builder.HasData(Create(Role.Registered,Authentication.Permission.ReadOrders));
         });
-        
-        //role users
-        modelBuilder.Entity<RoleUser>(builder =>
-        {
-            builder.ToTable("role_users");
-            builder.HasKey(rp => new { rp.RoleId, rp.UserId });
-        });
-
 
         //orders
         modelBuilder.Entity<Order>(builder =>

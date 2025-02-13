@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Serilog;
 using Webhooks.Api.Authentication;
 using Webhooks.Api.Authentication.OptionsSetup;
@@ -35,6 +36,11 @@ builder.Services.ConfigureOptions<JwtBearerOptionsSetup>();
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer();
+
+builder.Services.AddAuthorization();
+builder.Services.AddSingleton<IAuthorizationHandler, PermissionAuthorizationHandler>();
+builder.Services.AddSingleton<IAuthorizationPolicyProvider, PermissionAuthorizationPolicyProvider>();
+builder.Services.AddScoped<PermissionService>();
 
 var app = builder.Build();
 

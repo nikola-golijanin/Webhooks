@@ -25,7 +25,7 @@ public class UserService
         if (user is null)
             return string.Empty; //return error
         
-        var token = _jwtProvider.Generate(user);
+        var token = await _jwtProvider.GenerateAsync(user);
         return token;
     }
 }
