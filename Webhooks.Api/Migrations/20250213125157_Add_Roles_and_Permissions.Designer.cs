@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Webhooks.Api.Data;
@@ -11,9 +12,11 @@ using Webhooks.Api.Data;
 namespace Webhooks.Api.Migrations
 {
     [DbContext(typeof(WebhooksDbContext))]
-    partial class WebhooksDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250213125157_Add_Roles_and_Permissions")]
+    partial class Add_Roles_and_Permissions
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

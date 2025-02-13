@@ -16,24 +16,74 @@ public sealed class WebhooksDbContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        //roles
+        modelBuilder.Entity<Role>(builder =>
+        {
+            builder.ToTable("roles");
+            
+            builder.HasKey(r => r.Id);
+            
+            builder.HasMany(r => r.Permissions)
+                .WithMany()
+                .UsingEntity<RolePermission>();
+            
+            builder.HasMany(r => r.Users)
+                .WithMany()
+                .UsingEntity<RoleUser>();
+
+            builder.HasData(Role.Registered);
+        });
+        
+        //permissions
+        modelBuilder.Entity<Permission>(builder =>
+        {
+            builder.ToTable("permissions");
+            builder.HasKey(p => p.Id);
+
+            var permissions = Enum.GetValues<Authentication.Permission>()
+                .Select(p => new Permission(Id: (int)p, Name: p.ToString()));
+            
+            builder.HasData(permissions);
+        });
+        
+        //role permissions
+        modelBuilder.Entity<RolePermission>(builder =>
+        {
+            builder.ToTable("role_permissions");
+            builder.HasKey(rp => new { rp.RoleId, rp.PermissionId });
+            builder.HasData(Create(Role.Registered,Authentication.Permission.ReadOrders));
+        });
+        
+        //role users
+        modelBuilder.Entity<RoleUser>(builder =>
+        {
+            builder.ToTable("role_users");
+            builder.HasKey(rp => new { rp.RoleId, rp.UserId });
+        });
+
+
+        //orders
         modelBuilder.Entity<Order>(builder =>
         {
             builder.ToTable("orders");
             builder.HasKey(o => o.Id);
         });
-
+        
+        //users
         modelBuilder.Entity<User>(builder =>
         {
             builder.ToTable("users");
             builder.HasKey(u => u.Id);
         });
-
+        
+        //webhooks
         modelBuilder.Entity<WebhookSubscription>(builder =>
         {
             builder.ToTable("subscriptions", "webhooks");
             builder.HasKey(ws => ws.Id);
         });
-
+        
+        //webhook delivery attempts
         modelBuilder.Entity<WebhookDeliveryAttempt>(builder =>
         {
             builder.ToTable("delivery_attempts", "webhooks");
@@ -43,5 +93,15 @@ public sealed class WebhooksDbContext : DbContext
                 .WithMany()
                 .HasForeignKey(wda => wda.WebhookSubscriptionId);
         });
+        return;
+
+        static RolePermission Create(Role role, Authentication.Permission permission)
+        {
+            return new RolePermission()
+            {
+                RoleId = role.Id,
+                PermissionId = (int)permission
+            };
+        }
     }
 }

@@ -10,6 +10,7 @@ namespace Webhooks.Api.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
+//[HasPermission(Permission.AccessOrders)]
 public class OrdersController : ControllerBase
 {
     private readonly WebhooksDbContext _context;
@@ -27,6 +28,7 @@ public class OrdersController : ControllerBase
     }
 
     [HttpGet]
+    //[HasPermission(Permission.ReadOrders)]
     [Authorize]
     public async Task<IActionResult> GetAllOrders()
     {
