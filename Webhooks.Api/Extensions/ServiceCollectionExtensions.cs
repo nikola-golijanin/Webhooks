@@ -4,9 +4,8 @@ using OpenTelemetry.Metrics;
 using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
 using Serilog;
-using Webhooks.Api.Data;
-using Webhooks.Api.Services.Consumers;
-using Webhooks.Api.Services.Publishers;
+using Webhooks.Infrastructure.Webhooks;
+using Webhooks.Persistance;
 
 namespace Webhooks.Api.Extensions;
 
@@ -42,7 +41,9 @@ public static class ServiceCollectionExtensions
     public static void AddDatabaseContext(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddDbContext<WebhooksDbContext>(options =>
-            options.UseNpgsql(configuration.GetConnectionString("PostgresConnection")));
+            options.UseNpgsql(configuration.GetConnectionString("PostgresConnection"),b => b.MigrationsAssembly("Webhooks.Persistance")));
+        //gitbash: dotnet ef migrations add InitialCreate --project Webhooks.Persistance/Webhooks.Persistance.csproj --startup-project Webhooks.Api/Webhooks.Api.csproj
+        //powershell: dotnet ef migrations add InitialCreate --project "..\Webhooks.Persistance\Webhooks.Persistance.csproj" --startup-project "..\Webhooks.Api\Webhooks.Api.csproj"
     }
 
     /// <summary>

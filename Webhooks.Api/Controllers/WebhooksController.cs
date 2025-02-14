@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Webhooks.Api.Contracts.Webhooks;
-using Webhooks.Api.Data;
-using Webhooks.Api.Models;
+using Webhooks.Domain.Models;
+using Webhooks.Persistance;
 
 namespace Webhooks.Api.Controllers;
 

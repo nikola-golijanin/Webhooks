@@ -1,10 +1,11 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Serilog;
-using Webhooks.Api.Authentication;
-using Webhooks.Api.Authentication.OptionsSetup;
 using Webhooks.Api.Extensions;
-using Webhooks.Api.Services.Identity;
+using Webhooks.Api.OptionsSetup;
+using Webhooks.Application.Abstractions;
+using Webhooks.Application.Users;
+using Webhooks.Infrastructure.Authentication;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -27,9 +28,10 @@ builder.Services.AddMassTransitServices(builder.Configuration);
 
 builder.Services.AddOpenTelemetryTracingAndMetrics();
 
-builder.Services.AddScoped<UserService>();
 
-builder.Services.AddScoped<JwtProvider>();
+builder.Services.AddScoped<IJwtProvider,JwtProvider>();
+
+builder.Services.AddScoped<IUserService,UserService>();
 
 builder.Services.ConfigureOptions<JwtOptionsSetup>();
 builder.Services.ConfigureOptions<JwtBearerOptionsSetup>();

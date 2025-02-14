@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Webhooks.Api.Contracts.Users;
-using Webhooks.Api.Services.Identity;
+using Webhooks.Application.Users;
 
 namespace Webhooks.Api.Controllers;
 
@@ -8,21 +8,21 @@ namespace Webhooks.Api.Controllers;
 [ApiController]
 public class UsersController : ControllerBase
 {
-    private readonly UserService _userService;
+    private readonly IUserService _userService;
 
-    public UsersController(UserService userService)
+    public UsersController(IUserService userService)
     {
         _userService = userService;
     }
 
     [HttpPost]
-    public async Task<IActionResult> LoginUserAsync([FromBody] LoginUserRequest request,CancellationToken cancellationToken)
+    public async Task<IActionResult> LoginUserAsync([FromBody] LoginUserRequest request, CancellationToken cancellationToken)
     {
-        var token = await _userService.LoginAsync(request);
-        
+        var token = await _userService.LoginAsync(request.Email);
+
         if (string.Empty.Equals(token))
             return BadRequest();
-        
+
         return Ok(token);
-    }    
+    }
 }

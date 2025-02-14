@@ -1,12 +1,12 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Webhooks.Api.Authentication;
 using Webhooks.Api.Contracts.Orders;
-using Webhooks.Api.Data;
-using Webhooks.Api.Models;
-using Webhooks.Api.Services.Publishers;
-using Permission = Webhooks.Api.Authentication.Permission;
+using Webhooks.Domain.Models;
+using Webhooks.Infrastructure.Authentication;
+using Webhooks.Infrastructure.Webhooks;
+using Webhooks.Persistance;
+using Permission = Webhooks.Domain.Enums.Permission;
 
 namespace Webhooks.Api.Controllers;
 

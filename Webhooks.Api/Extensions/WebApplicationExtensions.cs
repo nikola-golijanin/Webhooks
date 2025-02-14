@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Scalar.AspNetCore;
-using Webhooks.Api.Data;
+using Webhooks.Persistance;
 
 namespace Webhooks.Api.Extensions;
 
