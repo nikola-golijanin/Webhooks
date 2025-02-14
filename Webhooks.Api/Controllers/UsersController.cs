@@ -1,28 +1,34 @@
 using Microsoft.AspNetCore.Mvc;
 using Webhooks.Api.Contracts.Users;
 using Webhooks.Application.Users;
+using Webhooks.Domain.Shared;
 
 namespace Webhooks.Api.Controllers;
 
 [Route("api/[controller]")]
-[ApiController]
-public class UsersController : ControllerBase
+public class UsersController : ApiController
 {
     private readonly IUserService _userService;
 
-    public UsersController(IUserService userService)
+    private readonly ILogger<UsersController> _logger;
+
+    public UsersController(IUserService userService, ILogger<UsersController> logger)
     {
         _userService = userService;
+        _logger = logger;
     }
 
     [HttpPost("login")]
     public async Task<IActionResult> LoginUserAsync([FromBody] LoginUserRequest request, CancellationToken cancellationToken)
     {
-        var token = await _userService.LoginAsync(request.Email);
+        Result<string> tokenResult = await _userService.LoginAsync(request.Email, cancellationToken);
 
-        if (string.Empty.Equals(token))
-            return BadRequest();
+        if (tokenResult.IsFailure)
+        {
+            _logger.LogError("Failed to login user with {Email}. {ErrorCode}", request.Email, tokenResult.Error.Code);
+            return HandleFailure(tokenResult);
+        }
 
-        return Ok(token);
+        return Ok(tokenResult.Value);
     }
 }

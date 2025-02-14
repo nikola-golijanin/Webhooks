@@ -1,6 +1,8 @@
 using Microsoft.EntityFrameworkCore;
 using Webhooks.Application.Abstractions;
+using Webhooks.Domain.Errors;
 using Webhooks.Domain.Models;
+using Webhooks.Domain.Shared;
 using Webhooks.Persistance;
 
 namespace Webhooks.Application.Users;
@@ -16,13 +18,13 @@ public class UserService : IUserService
         _jwtProvider = jwtProvider;
     }
 
-    public async Task<string> LoginAsync(string email)
+    public async Task<Result<string>> LoginAsync(string email, CancellationToken cancellationToken)
     {
         User? user = await _context.Users
-            .FirstOrDefaultAsync(u => u.Email == email);
+            .FirstOrDefaultAsync(u => u.Email == email, cancellationToken);
 
         if (user is null)
-            return string.Empty; //return error
+            return Result.Failure<string>(DomainErrors.User.InvalidCredentials);
 
         var token = await _jwtProvider.GenerateTokenAsync(user);
         return token;

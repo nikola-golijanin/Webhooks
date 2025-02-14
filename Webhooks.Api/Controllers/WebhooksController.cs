@@ -6,8 +6,7 @@ using Webhooks.Persistance;
 namespace Webhooks.Api.Controllers;
 
 [Route("api/[controller]")]
-[ApiController]
-public class WebhooksController : ControllerBase
+public class WebhooksController : ApiController
 {
     private readonly WebhooksDbContext _context;
 

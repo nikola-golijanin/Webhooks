@@ -11,9 +11,7 @@ using Permission = Webhooks.Domain.Enums.Permission;
 namespace Webhooks.Api.Controllers;
 
 [Route("api/[controller]")]
-[ApiController]
-//[HasPermission(Permission.AccessOrders)]
-public class OrdersController : ControllerBase
+public class OrdersController : ApiController
 {
     private readonly WebhooksDbContext _context;
     private readonly WebhookDispatcher _webhookDispatcher;

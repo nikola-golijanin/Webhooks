@@ -6,27 +6,25 @@ using Webhooks.Domain.Enums;
 using Webhooks.Infrastructure.Authentication;
 using Webhooks.Persistance;
 
-namespace Webhooks.Api.Controllers
+namespace Webhooks.Api.Controllers;
+
+[Route("api/[controller]")]
+[HasPermission(Permission.AccessRoles)]
+public class RolesController : ApiController
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    [HasPermission(Permission.AccessRoles)]
-    public class RolesController : ControllerBase
+    private readonly WebhooksDbContext _context;
+
+    public RolesController(WebhooksDbContext context)
     {
-        private readonly WebhooksDbContext _context;
+        _context = context;
+    }
 
-        public RolesController(WebhooksDbContext context)
-        {
-            _context = context;
-        }
-
-        //Generate endpoint that will list all roles
-        [HttpGet]
-        [HasPermission(Permission.ReadRoles)]
-        public async Task<IActionResult> GetRoles()
-        {
-            var roles = await _context.Roles.Select(r => new GetRolesResponse(r.Id, r.Name)).ToListAsync();
-            return Ok(roles);
-        }
+    //Generate endpoint that will list all roles
+    [HttpGet]
+    [HasPermission(Permission.ReadRoles)]
+    public async Task<IActionResult> GetRoles()
+    {
+        var roles = await _context.Roles.Select(r => new GetRolesResponse(r.Id, r.Name)).ToListAsync();
+        return Ok(roles);
     }
 }

@@ -1,6 +1,8 @@
+using Webhooks.Domain.Shared;
+
 namespace Webhooks.Application.Users;
 
 public interface IUserService
 {
-    Task<string> LoginAsync(string email);
+    Task<Result<string>> LoginAsync(string email, CancellationToken cancellationToken);
 }
