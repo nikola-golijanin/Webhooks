@@ -1,14 +1,18 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Webhooks.Api.Contracts.Orders;
-using Webhooks.Api.Data;
-using Webhooks.Api.Models;
-using Webhooks.Api.Services.Publishers;
+using Webhooks.Domain.Models;
+using Webhooks.Infrastructure.Authentication;
+using Webhooks.Infrastructure.Webhooks;
+using Webhooks.Persistance;
+using Permission = Webhooks.Domain.Enums.Permission;
 
 namespace Webhooks.Api.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
+//[HasPermission(Permission.AccessOrders)]
 public class OrdersController : ControllerBase
 {
     private readonly WebhooksDbContext _context;
@@ -26,6 +30,8 @@ public class OrdersController : ControllerBase
     }
 
     [HttpGet]
+    [HasPermission(Permission.ReadOrders)]
+    [Authorize]
     public async Task<IActionResult> GetAllOrders()
     {
         var orders = await _context.Orders.ToListAsync();

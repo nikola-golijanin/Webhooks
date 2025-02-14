@@ -1,6 +1,5 @@
 using Microsoft.EntityFrameworkCore;
-using Scalar.AspNetCore;
-using Webhooks.Api.Data;
+using Webhooks.Persistance;
 
 namespace Webhooks.Api.Extensions;
 
@@ -18,21 +17,6 @@ public static class WebApplicationExtensions
         await db.Database.MigrateAsync();
     }
 
-    /// <summary>
-    ///     Configures and adds the Scalar UI for API reference documentation.
-    ///     This provides a user-friendly interface to explore the Webhooks API.
-    /// </summary>
-    /// <param name="app">The WebApplication instance.</param>
-    public static void AddScalarUi(this WebApplication app)
-    {
-        app.MapScalarApiReference(
-            options =>
-            {
-                options.Title = "Webhooks API";
-                options.DotNetFlag = true;
-            }
-        );
-    }
 
     /// <summary>
     ///     Checks if the current hosting environment name is  Docker.
