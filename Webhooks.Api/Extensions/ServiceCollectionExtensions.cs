@@ -1,5 +1,7 @@
 ﻿using MassTransit;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi.Models;
 using OpenTelemetry.Metrics;
 using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
@@ -22,6 +24,39 @@ public static class ServiceCollectionExtensions
             loggerConfig.ReadFrom.Configuration(context.Configuration));
     }
 
+    public static void AddSwaggerGenWithAuth(this IServiceCollection services){
+        services.AddSwaggerGen(o =>
+        {
+            o.CustomSchemaIds(id => id.FullName!.Replace('+','-'));
+            var securityScheme = new OpenApiSecurityScheme
+            {
+                Name = "Authorization",
+                Description = "JWT Authorization header using the Bearer scheme.",
+                In = ParameterLocation.Header,
+                Type = SecuritySchemeType.Http,
+                Scheme = JwtBearerDefaults.AuthenticationScheme,
+                BearerFormat = "JWT"
+            };
+
+            o.AddSecurityDefinition(JwtBearerDefaults.AuthenticationScheme, securityScheme);
+
+            var securityRequirement = new OpenApiSecurityRequirement
+            {
+                {
+                    new OpenApiSecurityScheme
+                    {
+                        Reference = new OpenApiReference
+                        {
+                            Type = ReferenceType.SecurityScheme,
+                            Id = JwtBearerDefaults.AuthenticationScheme
+                        }
+                    },
+                    Array.Empty<string>()
+                }
+            };
+            o.AddSecurityRequirement(securityRequirement);
+        });
+    }
 
     /// <summary>
     ///     Registers application services into the dependency injection container.

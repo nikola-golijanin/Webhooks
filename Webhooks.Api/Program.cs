@@ -22,6 +22,8 @@ builder.Services.AddHttpClient();
 
 builder.Services.AddServices();
 
+builder.Services.AddSwaggerGenWithAuth();
+
 builder.Services.AddDatabaseContext(builder.Configuration);
 
 builder.Services.AddMassTransitServices(builder.Configuration);
@@ -50,7 +52,8 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment() || app.Environment.IsDocker())
 {
     app.MapOpenApi();
-    app.AddScalarUi();
+    app.UseSwagger();
+    app.UseSwaggerUI();
     await app.ApplyMigrationAsync();
 }
 
