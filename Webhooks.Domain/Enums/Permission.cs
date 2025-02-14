@@ -4,4 +4,6 @@ public enum Permission
 {
     AccessOrders = 1,
     ReadOrders = 2,
+    AccessRoles = 3,
+    ReadRoles = 4,
 }

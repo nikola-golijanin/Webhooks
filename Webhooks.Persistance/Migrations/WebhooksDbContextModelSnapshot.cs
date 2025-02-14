@@ -84,6 +84,16 @@ namespace Webhooks.Persistance.Migrations
                         {
                             Id = 2,
                             Name = "ReadOrders"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Name = "AccessRoles"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Name = "ReadRoles"
                         });
                 });
 
@@ -102,13 +112,6 @@ namespace Webhooks.Persistance.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("roles", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Name = "Registered"
-                        });
                 });
 
             modelBuilder.Entity("Webhooks.Domain.Models.RolePermission", b =>
@@ -124,13 +127,6 @@ namespace Webhooks.Persistance.Migrations
                     b.HasIndex("PermissionId");
 
                     b.ToTable("role_permissions", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            RoleId = 1,
-                            PermissionId = 2
-                        });
                 });
 
             modelBuilder.Entity("Webhooks.Domain.Models.User", b =>

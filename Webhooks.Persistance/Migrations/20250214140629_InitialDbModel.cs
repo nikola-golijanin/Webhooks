@@ -9,7 +9,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Webhooks.Persistance.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreate : Migration
+    public partial class InitialDbModel : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -165,18 +165,10 @@ namespace Webhooks.Persistance.Migrations
                 values: new object[,]
                 {
                     { 1, "AccessOrders" },
-                    { 2, "ReadOrders" }
+                    { 2, "ReadOrders" },
+                    { 3, "AccessRoles" },
+                    { 4, "ReadRoles" }
                 });
-
-            migrationBuilder.InsertData(
-                table: "roles",
-                columns: new[] { "Id", "Name" },
-                values: new object[] { 1, "Registered" });
-
-            migrationBuilder.InsertData(
-                table: "role_permissions",
-                columns: new[] { "PermissionId", "RoleId" },
-                values: new object[] { 2, 1 });
 
             migrationBuilder.CreateIndex(
                 name: "IX_delivery_attempts_WebhookSubscriptionId",

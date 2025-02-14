@@ -32,7 +32,10 @@ builder.Services.AddMassTransitServices(builder.Configuration);
 
 builder.Services.AddOpenTelemetryTracingAndMetrics();
 
-
+// TODO:
+// Add Role and User Managment. For example that you can assign existing roles to users
+// Add Permission Management. For example that you can assign permissions to roles
+// Prepare sql script to seed data with roles, permissions and users, or define some function to seed data
 builder.Services.AddScoped<IJwtProvider, JwtProvider>();
 
 builder.Services.AddScoped<IUserService, UserService>();

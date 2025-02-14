@@ -13,6 +13,7 @@ public sealed class WebhooksDbContext : DbContext
 
     public DbSet<User> Users { get; set; }
     public DbSet<Order> Orders { get; set; }
+    public DbSet<Role> Roles { get; set; }
     public DbSet<WebhookSubscription> WebhookSubscriptions { get; set; }
     public DbSet<WebhookDeliveryAttempt> WebhookDeliveryAttempts { get; set; }
 
@@ -32,8 +33,6 @@ public sealed class WebhooksDbContext : DbContext
             builder.HasMany(r => r.Users)
                 .WithMany(u => u.Roles)
                 .UsingEntity(e => e.ToTable("role_users"));
-
-            builder.HasData(Role.Registered);
         });
 
         //permissions
@@ -53,7 +52,6 @@ public sealed class WebhooksDbContext : DbContext
         {
             builder.ToTable("role_permissions");
             builder.HasKey(rp => new { rp.RoleId, rp.PermissionId });
-            builder.HasData(Create(Role.Registered, Domain.Enums.Permission.ReadOrders));
         });
 
         //orders
@@ -89,6 +87,7 @@ public sealed class WebhooksDbContext : DbContext
         });
         return;
 
+        //TODO check this for seeding data
         static RolePermission Create(Role role, Domain.Enums.Permission permission)
         {
             return new RolePermission()
