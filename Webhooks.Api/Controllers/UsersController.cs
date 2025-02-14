@@ -15,7 +15,7 @@ public class UsersController : ControllerBase
         _userService = userService;
     }
 
-    [HttpPost]
+    [HttpPost("login")]
     public async Task<IActionResult> LoginUserAsync([FromBody] LoginUserRequest request, CancellationToken cancellationToken)
     {
         var token = await _userService.LoginAsync(request.Email);
