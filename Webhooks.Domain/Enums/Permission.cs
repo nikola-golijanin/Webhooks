@@ -6,4 +6,5 @@ public enum Permission
     ReadOrders = 2,
     AccessRoles = 3,
     ReadRoles = 4,
+    CreateWebhookSubscriptions = 5,
 }

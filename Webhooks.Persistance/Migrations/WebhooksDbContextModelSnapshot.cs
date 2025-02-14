@@ -22,21 +22,6 @@ namespace Webhooks.Persistance.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("RoleUser", b =>
-                {
-                    b.Property<int>("RolesId")
-                        .HasColumnType("integer");
-
-                    b.Property<Guid>("UsersId")
-                        .HasColumnType("uuid");
-
-                    b.HasKey("RolesId", "UsersId");
-
-                    b.HasIndex("UsersId");
-
-                    b.ToTable("role_users", (string)null);
-                });
-
             modelBuilder.Entity("Webhooks.Domain.Models.Order", b =>
                 {
                     b.Property<Guid>("Id")
@@ -94,6 +79,11 @@ namespace Webhooks.Persistance.Migrations
                         {
                             Id = 4,
                             Name = "ReadRoles"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Name = "CreateWebhookSubscriptions"
                         });
                 });
 
@@ -112,6 +102,18 @@ namespace Webhooks.Persistance.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("roles", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "Admin"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "User"
+                        });
                 });
 
             modelBuilder.Entity("Webhooks.Domain.Models.RolePermission", b =>
@@ -127,13 +129,42 @@ namespace Webhooks.Persistance.Migrations
                     b.HasIndex("PermissionId");
 
                     b.ToTable("role_permissions", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            RoleId = 1,
+                            PermissionId = 1
+                        },
+                        new
+                        {
+                            RoleId = 1,
+                            PermissionId = 2
+                        },
+                        new
+                        {
+                            RoleId = 1,
+                            PermissionId = 3
+                        },
+                        new
+                        {
+                            RoleId = 1,
+                            PermissionId = 4
+                        },
+                        new
+                        {
+                            RoleId = 1,
+                            PermissionId = 5
+                        });
                 });
 
             modelBuilder.Entity("Webhooks.Domain.Models.User", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime>("CreatedOnUtc")
                         .HasColumnType("timestamp with time zone");
@@ -153,6 +184,16 @@ namespace Webhooks.Persistance.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("users", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            CreatedOnUtc = new DateTime(2021, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            Email = "admin@admin.com",
+                            FirstName = "Admin",
+                            LastName = "Admin"
+                        });
                 });
 
             modelBuilder.Entity("Webhooks.Domain.Models.WebhookDeliveryAttempt", b =>
@@ -206,19 +247,31 @@ namespace Webhooks.Persistance.Migrations
                     b.ToTable("subscriptions", "webhooks");
                 });
 
-            modelBuilder.Entity("RoleUser", b =>
+            modelBuilder.Entity("role_users", b =>
                 {
-                    b.HasOne("Webhooks.Domain.Models.Role", null)
-                        .WithMany()
-                        .HasForeignKey("RolesId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.Property<int>("RolesId")
+                        .HasColumnType("integer");
 
-                    b.HasOne("Webhooks.Domain.Models.User", null)
-                        .WithMany()
-                        .HasForeignKey("UsersId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.Property<int>("UsersId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("RolesId", "UsersId");
+
+                    b.HasIndex("UsersId");
+
+                    b.ToTable("role_users");
+
+                    b.HasData(
+                        new
+                        {
+                            RolesId = 1,
+                            UsersId = 1
+                        },
+                        new
+                        {
+                            RolesId = 2,
+                            UsersId = 1
+                        });
                 });
 
             modelBuilder.Entity("Webhooks.Domain.Models.RolePermission", b =>
@@ -241,6 +294,21 @@ namespace Webhooks.Persistance.Migrations
                     b.HasOne("Webhooks.Domain.Models.WebhookSubscription", null)
                         .WithMany()
                         .HasForeignKey("WebhookSubscriptionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("role_users", b =>
+                {
+                    b.HasOne("Webhooks.Domain.Models.Role", null)
+                        .WithMany()
+                        .HasForeignKey("RolesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Webhooks.Domain.Models.User", null)
+                        .WithMany()
+                        .HasForeignKey("UsersId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

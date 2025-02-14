@@ -13,7 +13,7 @@ public class PermissionService
         _context = context;
     }
 
-    public async Task<HashSet<string>> GetPermissionsAsync(Guid userId)
+    public async Task<HashSet<string>> GetPermissionsAsync(int userId)
     {
         ICollection<Role>[] roles = await _context.Users.Include(u => u.Roles)
             .ThenInclude(r => r.Permissions)
