@@ -86,6 +86,8 @@ INSERT INTO permissions ("Id", "Name")
 VALUES (4, 'ReadRoles');
 INSERT INTO permissions ("Id", "Name")
 VALUES (5, 'CreateWebhookSubscriptions');
+INSERT INTO permissions ("Id", "Name")
+VALUES (6, 'AssignRoles');
 
 INSERT INTO roles ("Id", "Name")
 VALUES (1, 'Admin');
@@ -105,6 +107,8 @@ INSERT INTO role_permissions ("PermissionId", "RoleId")
 VALUES (4, 1);
 INSERT INTO role_permissions ("PermissionId", "RoleId")
 VALUES (5, 1);
+INSERT INTO role_permissions ("PermissionId", "RoleId")
+VALUES (6, 1);
 
 INSERT INTO role_users ("RolesId", "UsersId")
 VALUES (1, 1);
@@ -137,6 +141,6 @@ SELECT setval(
     false);
 
 INSERT INTO "__EFMigrationsHistory" ("MigrationId", "ProductVersion")
-VALUES ('20250214193722_InitialCreate', '9.0.1');
+VALUES ('20250217094928_InitialCreate', '9.0.1');
 
 COMMIT;
