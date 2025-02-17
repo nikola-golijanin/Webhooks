@@ -1,5 +1,6 @@
 using MassTransit;
 using Microsoft.EntityFrameworkCore;
+using Serilog;
 using Webhooks.Infrastructure.Webhooks;
 using Webhooks.Persistance;
 
@@ -7,6 +8,8 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
+builder.Host.UseSerilog((context, loggerConfig) =>
+            loggerConfig.ReadFrom.Configuration(context.Configuration));
 builder.Services.AddOpenApi();
 builder.Services.AddHttpClient();
 builder.Services.AddDbContext<WebhooksDbContext>(options =>
