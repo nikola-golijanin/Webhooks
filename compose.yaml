@@ -66,3 +66,23 @@
     ports:
       - 18888:18888
       - 4317:18889
+  webhooks.processing:
+    image: webhooks.processing
+    build:
+      context: .
+      dockerfile: Webhooks.Processing/Dockerfile
+    environment:
+      # Web App Env
+      - ASPNETCORE_ENVIRONMENT=Docker
+      # Postgres Connection
+      - ConnectionStrings__PostgresConnection=Host=webhooks.db;Database=WebhooksDb;Username=postgres;Password=postgres
+      # RabbitMQ Connection
+      - RabbitMQ__Host=amqp://webhooks.mq:5672
+      - RabbitMQ__Username=guest
+      - RabbitMQ__Password=guest
+      # OpenTelemetry 
+    depends_on:
+      - webhooks.db 
+      - webhooks.mq
+    ports: 
+      - "5153:5153"

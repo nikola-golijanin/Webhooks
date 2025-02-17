@@ -18,6 +18,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Webhooks.Persistance", "Web
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Webhooks.Infrastructure", "Webhooks.Infrastructure\Webhooks.Infrastructure.csproj", "{DECA392C-4BF9-4761-A22E-CBDD169BCF93}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Webhooks.Processing", "Webhooks.Processing\Webhooks.Processing.csproj", "{2423D1B4-4783-4E98-97B0-98CA6F75B1B7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -47,5 +49,9 @@ Global
 		{DECA392C-4BF9-4761-A22E-CBDD169BCF93}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DECA392C-4BF9-4761-A22E-CBDD169BCF93}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DECA392C-4BF9-4761-A22E-CBDD169BCF93}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2423D1B4-4783-4E98-97B0-98CA6F75B1B7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2423D1B4-4783-4E98-97B0-98CA6F75B1B7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2423D1B4-4783-4E98-97B0-98CA6F75B1B7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2423D1B4-4783-4E98-97B0-98CA6F75B1B7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
