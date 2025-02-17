@@ -101,9 +101,6 @@ public static class ServiceCollectionExtensions
         {
             busConfig.SetKebabCaseEndpointNameFormatter();
 
-            busConfig.AddConsumer<WebhookDispatchedConsumer>();
-            busConfig.AddConsumer<WebhookTriggeredConsumer>();
-
             busConfig.UsingRabbitMq((context, config) =>
             {
                 config.Host(new Uri(configuration["RabbitMQ:Host"]!), host =>

@@ -2,7 +2,16 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Docker .NET Attach (Preview)",
+            "name": "Debug Webhooks.Api",
+            "type": "docker",
+            "request": "attach",
+            "platform": "netCore",
+            "sourceFileMap": {
+                "/src": "${workspaceFolder}"
+            }
+        },
+        {
+            "name": "Debug Webhooks.Processing",
             "type": "docker",
             "request": "attach",
             "platform": "netCore",
@@ -41,7 +50,25 @@
             "request": "launch",
             "preLaunchTask": "docker-run: debug",
             "netCore": {
-                "appProject": "${workspaceFolder}/Webhooks.Api/Webhooks.Api.csproj"
+                "appProject": "${workspaceFolder}/Webhooks.Processing/Webhooks.Processing.csproj"
+            }
+        },
+        {
+            "name": "Docker .NET Launch - Processing",
+            "type": "docker",
+            "request": "launch",
+            "preLaunchTask": "docker-run: debug",
+            "netCore": {
+                "appProject": "${workspaceFolder}/Webhooks.Processing/Webhooks.Processing.csproj"
+            }
+        },
+        {
+            "name": "Docker .NET Launch - API",
+            "type": "docker",
+            "request": "launch",
+            "preLaunchTask": "docker-run: debug",
+            "netCore": {
+                "appProject": "${workspaceFolder}/Webhooks.Processing/Webhooks.Processing.csproj"
             }
         }
     ]

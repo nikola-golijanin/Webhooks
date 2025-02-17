@@ -37,9 +37,10 @@
             ],
             "problemMatcher": "$msCompile"
         },
+        //WebApi config
         {
             "type": "docker-build",
-            "label": "docker-build: debug",
+            "label": "docker-build: debug - webapi",
             "dependsOn": [
                 "build"
             ],
@@ -56,7 +57,7 @@
         },
         {
             "type": "docker-build",
-            "label": "docker-build: release",
+            "label": "docker-build: release - webapi",
             "dependsOn": [
                 "build"
             ],
@@ -76,22 +77,11 @@
         },
         {
             "type": "docker-run",
-            "label": "docker-run: debug",
+            "label": "docker-run: debug - webapi",
             "dependsOn": [
-                "docker-build: debug"
+                "docker-build: debug - webapi"
             ],
-            "dockerRun": {
-                "ports": [
-                    {
-                        "hostPort": 5260,
-                        "containerPort": 5260
-                    },
-                    {
-                        "hostPort": 7144,
-                        "containerPort": 7144
-                    }
-                ]
-            },
+            "dockerRun": {},
             "netCore": {
                 "appProject": "${workspaceFolder}/Webhooks.Api/Webhooks.Api.csproj",
                 "enableDebugging": true
@@ -99,15 +89,76 @@
         },
         {
             "type": "docker-run",
-            "label": "docker-run: release",
+            "label": "docker-run: release - webapi",
             "dependsOn": [
-                "docker-build: release"
+                "docker-build: release - webapi"
             ],
             "dockerRun": {},
             "netCore": {
-                "appProject": "${workspaceFolder}/Webhooks.Api/Webhooks.Api.csproj",
-                "enableDebugging": true,
-                "configureSsl": true
+                "appProject": "${workspaceFolder}/Webhooks.Api/Webhooks.Api.csproj"
+            }
+        },
+
+        
+        //Processing config
+        {
+            "type": "docker-build",
+            "label": "docker-build: debug - processing",
+            "dependsOn": [
+                "build"
+            ],
+            "dockerBuild": {
+                "tag": "webhooks:dev",
+                "target": "base",
+                "dockerfile": "${workspaceFolder}/Webhooks.Processing/Dockerfile",
+                "context": "${workspaceFolder}",
+                "pull": true
+            },
+            "netCore": {
+                "appProject": "${workspaceFolder}/Webhooks.Processing/Webhooks.Processing.csproj"
+            }
+        },
+        {
+            "type": "docker-build",
+            "label": "docker-build: release - processing",
+            "dependsOn": [
+                "build"
+            ],
+            "dockerBuild": {
+                "tag": "webhooks:latest",
+                "dockerfile": "${workspaceFolder}/Webhooks.Processing/Dockerfile",
+                "context": "${workspaceFolder}",
+                "platform": {
+                    "os": "linux",
+                    "architecture": "amd64"
+                },
+                "pull": true
+            },
+            "netCore": {
+                "appProject": "${workspaceFolder}/Webhooks.Processing/Webhooks.Processing.csproj"
+            }
+        },
+        {
+            "type": "docker-run",
+            "label": "docker-run: debug - processing",
+            "dependsOn": [
+                "docker-build: debug - processing"
+            ],
+            "dockerRun": {},
+            "netCore": {
+                "appProject": "${workspaceFolder}/Webhooks.Processing/Webhooks.Processing.csproj",
+                "enableDebugging": true
+            }
+        },
+        {
+            "type": "docker-run",
+            "label": "docker-run: release",
+            "dependsOn": [
+                "docker-build: release - processing"
+            ],
+            "dockerRun": {},
+            "netCore": {
+                "appProject": "${workspaceFolder}/Webhooks.Processing/Webhooks.Processing.csproj"
             }
         }
     ]
