@@ -84,6 +84,11 @@ namespace Webhooks.Persistance.Migrations
                         {
                             Id = 5,
                             Name = "CreateWebhookSubscriptions"
+                        },
+                        new
+                        {
+                            Id = 6,
+                            Name = "AssignRoles"
                         });
                 });
 
@@ -155,6 +160,11 @@ namespace Webhooks.Persistance.Migrations
                         {
                             RoleId = 1,
                             PermissionId = 5
+                        },
+                        new
+                        {
+                            RoleId = 1,
+                            PermissionId = 6
                         });
                 });
 

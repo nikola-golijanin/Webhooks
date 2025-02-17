@@ -12,7 +12,7 @@ using Webhooks.Persistance;
 namespace Webhooks.Persistance.Migrations
 {
     [DbContext(typeof(WebhooksDbContext))]
-    [Migration("20250214193722_InitialCreate")]
+    [Migration("20250217094928_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -87,6 +87,11 @@ namespace Webhooks.Persistance.Migrations
                         {
                             Id = 5,
                             Name = "CreateWebhookSubscriptions"
+                        },
+                        new
+                        {
+                            Id = 6,
+                            Name = "AssignRoles"
                         });
                 });
 
@@ -158,6 +163,11 @@ namespace Webhooks.Persistance.Migrations
                         {
                             RoleId = 1,
                             PermissionId = 5
+                        },
+                        new
+                        {
+                            RoleId = 1,
+                            PermissionId = 6
                         });
                 });
 

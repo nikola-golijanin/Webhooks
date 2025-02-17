@@ -169,7 +169,8 @@ namespace Webhooks.Persistance.Migrations
                     { 2, "ReadOrders" },
                     { 3, "AccessRoles" },
                     { 4, "ReadRoles" },
-                    { 5, "CreateWebhookSubscriptions" }
+                    { 5, "CreateWebhookSubscriptions" },
+                    { 6, "AssignRoles" }
                 });
 
             migrationBuilder.InsertData(
@@ -195,7 +196,8 @@ namespace Webhooks.Persistance.Migrations
                     { 2, 1 },
                     { 3, 1 },
                     { 4, 1 },
-                    { 5, 1 }
+                    { 5, 1 },
+                    { 6, 1 }
                 });
 
             migrationBuilder.InsertData(

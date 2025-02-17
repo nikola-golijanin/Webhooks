@@ -12,10 +12,6 @@
   </ItemGroup>
   
   <ItemGroup>
-    <Folder Include="Authentication\" />
-  </ItemGroup>
-  
-  <ItemGroup>
     <ProjectReference Include="..\Webhooks.Application\Webhooks.Application.csproj" />
   </ItemGroup>
 

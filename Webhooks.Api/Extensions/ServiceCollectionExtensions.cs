@@ -6,6 +6,10 @@ using OpenTelemetry.Metrics;
 using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
 using Serilog;
+using Webhooks.Application.Abstractions;
+using Webhooks.Application.Authentication;
+using Webhooks.Application.Users;
+using Webhooks.Infrastructure.Authentication;
 using Webhooks.Infrastructure.Webhooks;
 using Webhooks.Persistance;
 
@@ -24,10 +28,11 @@ public static class ServiceCollectionExtensions
             loggerConfig.ReadFrom.Configuration(context.Configuration));
     }
 
-    public static void AddSwaggerGenWithAuth(this IServiceCollection services){
+    public static void AddSwaggerGenWithAuth(this IServiceCollection services)
+    {
         services.AddSwaggerGen(o =>
         {
-            o.CustomSchemaIds(id => id.FullName!.Replace('+','-'));
+            o.CustomSchemaIds(id => id.FullName!.Replace('+', '-'));
             var securityScheme = new OpenApiSecurityScheme
             {
                 Name = "Authorization",
@@ -64,7 +69,10 @@ public static class ServiceCollectionExtensions
     /// <param name="services">The IServiceCollection instance.</param>
     public static void AddServices(this IServiceCollection services)
     {
-        services.AddScoped<WebhookDispatcher>();
+        services.AddScoped<WebhookDispatcher>()
+                .AddScoped<IJwtProvider, JwtProvider>()
+                .AddScoped<IUserService, UserService>()
+                .AddScoped<IRoleManager, RoleManager>();
     }
 
     /// <summary>
@@ -76,7 +84,7 @@ public static class ServiceCollectionExtensions
     public static void AddDatabaseContext(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddDbContext<WebhooksDbContext>(options =>
-            options.UseNpgsql(configuration.GetConnectionString("PostgresConnection"),b => b.MigrationsAssembly("Webhooks.Persistance")));
+            options.UseNpgsql(configuration.GetConnectionString("PostgresConnection"), b => b.MigrationsAssembly("Webhooks.Persistance")));
         //gitbash: dotnet ef migrations add InitialCreate --project Webhooks.Persistance/Webhooks.Persistance.csproj --startup-project Webhooks.Api/Webhooks.Api.csproj
         //powershell: dotnet ef migrations add InitialCreate --project "..\Webhooks.Persistance\Webhooks.Persistance.csproj" --startup-project "..\Webhooks.Api\Webhooks.Api.csproj"
     }

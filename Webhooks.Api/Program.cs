@@ -5,8 +5,6 @@ using Microsoft.IdentityModel.Tokens;
 using Serilog;
 using Webhooks.Api.Extensions;
 using Webhooks.Api.OptionsSetup;
-using Webhooks.Application.Abstractions;
-using Webhooks.Application.Users;
 using Webhooks.Infrastructure.Authentication;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -36,10 +34,7 @@ builder.Services.AddOpenTelemetryTracingAndMetrics();
 // Add Role and User Managment. For example that you can assign existing roles to users
 // Add Permission Management. For example that you can assign permissions to roles
 // Prepare sql script to seed data with roles, permissions and users, or define some function to seed data
-builder.Services.AddScoped<IJwtProvider, JwtProvider>();
-
-builder.Services.AddScoped<IUserService, UserService>();
-
+// Also figure out role and permission names
 builder.Services.ConfigureOptions<JwtOptionsSetup>();
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
