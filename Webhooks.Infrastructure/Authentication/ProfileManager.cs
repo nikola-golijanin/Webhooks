@@ -7,17 +7,17 @@ using Webhooks.Persistance;
 
 namespace Webhooks.Infrastructure.Authentication;
 
-public class RoleManager : IRoleManager
+public class ProfileManager : IProfileManager
 {
 
     private readonly WebhooksDbContext _context;
 
-    public RoleManager(WebhooksDbContext context)
+    public ProfileManager(WebhooksDbContext context)
     {
         _context = context;
     }
 
-    public async Task<Result> AssignRoleToUserAsync(int roleId, int userId, CancellationToken cancellationToken)
+    public async Task<Result> AssignProfileToUserAsync(int roleId, int userId, CancellationToken cancellationToken)
     {
         var user = await _context.Users
             .Include(u => u.Profiles)
@@ -37,7 +37,7 @@ public class RoleManager : IRoleManager
         return Result.Success();
     }
 
-    public async Task<Result<HashSet<Profile>>> GetRolesAsync(CancellationToken cancellationToken)
+    public async Task<Result<HashSet<Profile>>> GetProfilesAsync(CancellationToken cancellationToken)
     {
         var roles = await _context.Roles
             .ToHashSetAsync(cancellationToken);
@@ -48,7 +48,7 @@ public class RoleManager : IRoleManager
         return Result.Success(roles);
     }
 
-    public async Task<Result<HashSet<Profile>>> GetUserRolesAsync(int userId, CancellationToken cancellationToken)
+    public async Task<Result<HashSet<Profile>>> GetUserProfilesAsync(int userId, CancellationToken cancellationToken)
     {
         var userRoles = await _context.Users
                     .Where(u => u.Id == userId)

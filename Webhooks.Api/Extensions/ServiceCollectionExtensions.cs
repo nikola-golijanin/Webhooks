@@ -72,7 +72,7 @@ public static class ServiceCollectionExtensions
         services.AddScoped<WebhookDispatcher>()
                 .AddScoped<IJwtProvider, JwtProvider>()
                 .AddScoped<IUserService, UserService>()
-                .AddScoped<IRoleManager, RoleManager>();
+                .AddScoped<IProfileManager, ProfileManager>();
     }
 
     /// <summary>
