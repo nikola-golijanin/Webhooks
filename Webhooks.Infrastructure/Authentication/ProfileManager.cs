@@ -30,7 +30,7 @@ public class ProfileManager : IProfileManager
             .FirstOrDefaultAsync(r => r.Id == roleId, cancellationToken);
 
         if (role is null)
-            return Result.Failure(DomainErrors.Role.RoleNotFound(roleId));
+            return Result.Failure(DomainErrors.Profile.ProfileNotFound(roleId));
 
         user.Profiles.Add(role);
         await _context.SaveChangesAsync(cancellationToken);
@@ -43,7 +43,7 @@ public class ProfileManager : IProfileManager
             .ToHashSetAsync(cancellationToken);
 
         if (roles.Count == 0)
-            return Result.Failure<HashSet<Profile>>(DomainErrors.Role.NoRolesFound);
+            return Result.Failure<HashSet<Profile>>(DomainErrors.Profile.NoProfilesFound);
 
         return Result.Success(roles);
     }
@@ -56,7 +56,7 @@ public class ProfileManager : IProfileManager
                     .ToHashSetAsync(cancellationToken);
 
         if (userRoles.Count == 0)
-            return Result.Failure<HashSet<Profile>>(DomainErrors.Role.NoRolesForUserFound(userId));
+            return Result.Failure<HashSet<Profile>>(DomainErrors.Profile.NoProfilesForUserFound(userId));
 
         return Result.Success(userRoles);
     }

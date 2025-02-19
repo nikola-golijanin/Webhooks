@@ -15,19 +15,19 @@ public static class DomainErrors
                     $"User with id {userId} not found");
     }
 
-    public static class Role
+    public static class Profile
     {
-        public static readonly Error NoRolesFound = new(
-            "Role.NoRolesFound",
-            "No roles found");
+        public static readonly Error NoProfilesFound = new(
+            "Profile.NoProfilesFound",
+            "No profiles found");
 
-        public static readonly Func<int, Error> NoRolesForUserFound = userId => new Error(
-            "Role.NoRolesForUserFound",
-            $"No roles found for user with id {userId}");
+        public static readonly Func<int, Error> NoProfilesForUserFound = userId => new Error(
+            "Profile.NoProfilesForUserFound",
+            $"No profiles found for user with id {userId}");
 
-        public static readonly Func<int, Error> RoleNotFound = roleId => new Error(
-            "Role.RoleNotFound",
-            $"Role with id {roleId} not found");
+        public static readonly Func<int, Error> ProfileNotFound = profileId => new Error(
+            "Profile.ProfileNotFound",
+            $"Profile with id {profileId} not found");
 
     }
 }
