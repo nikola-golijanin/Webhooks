@@ -23,7 +23,7 @@ public class ProfilesController : ApiController
     }
 
     [HttpGet]
-    [HasPermission(Permission.ReadRoles)]
+    [HasPermission(Permission.ReadProfiles)]
     public async Task<IActionResult> GetProfilesAsync(CancellationToken cancellationToken)
     {
         Result<HashSet<Profile>> profilesResult = await _profileManager.GetProfilesAsync(cancellationToken);
@@ -36,7 +36,7 @@ public class ProfilesController : ApiController
     }
 
     [HttpGet("{userId:int}")]
-    [HasPermission(Permission.ReadRoles)]
+    [HasPermission(Permission.ReadProfiles)]
     public async Task<IActionResult> GetUserProfilesAsync(int userId, CancellationToken cancellationToken)
     {
         var userProfilesResult = await _profileManager.GetUserProfilesAsync(userId, cancellationToken);
@@ -49,7 +49,7 @@ public class ProfilesController : ApiController
     }
 
     [HttpPost("{profileId:int}/assign/{userId:int}")]
-    //[HasPermission(Permission.AssignRoles)]
+    [HasPermission(Permission.AssignProfiles)]
     public async Task<IActionResult> AssignProfileToUserAsync(int profileId, int userId, CancellationToken cancellationToken)
     {
         Result assignProfileResult = await _profileManager.AssignProfileToUserAsync(profileId, userId, cancellationToken);

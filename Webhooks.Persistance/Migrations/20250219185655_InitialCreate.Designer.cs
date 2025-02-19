@@ -12,7 +12,7 @@ using Webhooks.Persistance;
 namespace Webhooks.Persistance.Migrations
 {
     [DbContext(typeof(WebhooksDbContext))]
-    [Migration("20250219174823_InitialCreate")]
+    [Migration("20250219185655_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -74,32 +74,32 @@ namespace Webhooks.Persistance.Migrations
                         new
                         {
                             Id = 1,
-                            Name = "AccessOrders"
+                            Name = "ReadProfiles"
                         },
                         new
                         {
                             Id = 2,
-                            Name = "ReadOrders"
+                            Name = "AssignProfiles"
                         },
                         new
                         {
                             Id = 3,
-                            Name = "AccessRoles"
+                            Name = "AccessOrders"
                         },
                         new
                         {
                             Id = 4,
-                            Name = "ReadRoles"
+                            Name = "ReadOrders"
                         },
                         new
                         {
                             Id = 5,
-                            Name = "CreateWebhookSubscriptions"
+                            Name = "CreateOrders"
                         },
                         new
                         {
                             Id = 6,
-                            Name = "AssignRoles"
+                            Name = "CreateSubscriptions"
                         });
                 });
 
@@ -130,7 +130,17 @@ namespace Webhooks.Persistance.Migrations
                         new
                         {
                             Id = 2,
-                            Name = "User"
+                            Name = "OrderManager"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Name = "UserManager"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Name = "Subscriber"
                         });
                 });
 
@@ -179,6 +189,31 @@ namespace Webhooks.Persistance.Migrations
                         new
                         {
                             ProfileId = 1,
+                            PermissionId = 6
+                        },
+                        new
+                        {
+                            ProfileId = 2,
+                            PermissionId = 5
+                        },
+                        new
+                        {
+                            ProfileId = 2,
+                            PermissionId = 4
+                        },
+                        new
+                        {
+                            ProfileId = 3,
+                            PermissionId = 1
+                        },
+                        new
+                        {
+                            ProfileId = 3,
+                            PermissionId = 2
+                        },
+                        new
+                        {
+                            ProfileId = 4,
                             PermissionId = 6
                         });
                 });
@@ -314,6 +349,16 @@ namespace Webhooks.Persistance.Migrations
                         new
                         {
                             profile_id = 2,
+                            user_id = 1
+                        },
+                        new
+                        {
+                            profile_id = 3,
+                            user_id = 1
+                        },
+                        new
+                        {
+                            profile_id = 4,
                             user_id = 1
                         });
                 });

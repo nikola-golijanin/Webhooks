@@ -168,12 +168,12 @@ namespace Webhooks.Persistance.Migrations
                 columns: new[] { "id", "name" },
                 values: new object[,]
                 {
-                    { 1, "AccessOrders" },
-                    { 2, "ReadOrders" },
-                    { 3, "AccessRoles" },
-                    { 4, "ReadRoles" },
-                    { 5, "CreateWebhookSubscriptions" },
-                    { 6, "AssignRoles" }
+                    { 1, "ReadProfiles" },
+                    { 2, "AssignProfiles" },
+                    { 3, "AccessOrders" },
+                    { 4, "ReadOrders" },
+                    { 5, "CreateOrders" },
+                    { 6, "CreateSubscriptions" }
                 });
 
             migrationBuilder.InsertData(
@@ -182,7 +182,9 @@ namespace Webhooks.Persistance.Migrations
                 values: new object[,]
                 {
                     { 1, "Admin" },
-                    { 2, "User" }
+                    { 2, "OrderManager" },
+                    { 3, "UserManager" },
+                    { 4, "Subscriber" }
                 });
 
             migrationBuilder.InsertData(
@@ -200,7 +202,12 @@ namespace Webhooks.Persistance.Migrations
                     { 3, 1 },
                     { 4, 1 },
                     { 5, 1 },
-                    { 6, 1 }
+                    { 6, 1 },
+                    { 4, 2 },
+                    { 5, 2 },
+                    { 1, 3 },
+                    { 2, 3 },
+                    { 6, 4 }
                 });
 
             migrationBuilder.InsertData(
@@ -209,7 +216,9 @@ namespace Webhooks.Persistance.Migrations
                 values: new object[,]
                 {
                     { 1, 1 },
-                    { 2, 1 }
+                    { 2, 1 },
+                    { 3, 1 },
+                    { 4, 1 }
                 });
 
             migrationBuilder.CreateIndex(
