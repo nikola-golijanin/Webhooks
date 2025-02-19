@@ -1,7 +1,9 @@
 using Microsoft.AspNetCore.Mvc;
 using Webhooks.Api.Contracts.Webhooks;
 using Webhooks.Domain.Models;
+using Webhooks.Infrastructure.Authentication;
 using Webhooks.Persistance;
+using Permission = Webhooks.Domain.Enums.Permission;
 
 namespace Webhooks.Api.Controllers;
 
@@ -16,6 +18,7 @@ public class WebhooksController : ApiController
     }
 
     [HttpPost("subscriptions")]
+    [HasPermission(Permission.CreateSubscriptions)]
     public IActionResult CreateSubscription([FromBody] CreateWebhookRequest request)
     {
         var subscription = new WebhookSubscription
