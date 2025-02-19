@@ -30,12 +30,11 @@ builder.Services.AddMassTransitServices(builder.Configuration);
 builder.Services.AddOpenTelemetryTracingAndMetrics();
 
 // TODO:
-// Add Role and User Managment. For example that you can assign existing roles to users
 // Add Permission Management. For example that you can assign permissions to roles
-// Prepare sql script to seed data with roles, permissions and users, or define some function to seed data
-// Also figure out role and permission names
 builder.Services.ConfigureOptions<JwtOptionsSetup>();
 
+//TODO
+// Add support for keycloak
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options => options.TokenValidationParameters = new TokenValidationParameters
     {

@@ -31,4 +31,6 @@ public class UsersController : ApiController
 
         return Ok(tokenResult.Value);
     }
+
+    //TODO register user
 }

@@ -1,4 +1,3 @@
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Webhooks.Application.Authentication;
 using Webhooks.Domain.Models;
@@ -42,7 +41,7 @@ public class ProfilesController : ApiController
         var userProfilesResult = await _profileManager.GetUserProfilesAsync(userId, cancellationToken);
         if (userProfilesResult.IsFailure)
         {
-            _logger.LogError("Failed to get roles for user with id {UserId}. {ErrorCode}", userId, userProfilesResult.Error.Code);
+            _logger.LogError("Failed to get profiles for user with id {UserId}. {ErrorCode}", userId, userProfilesResult.Error.Code);
             return HandleFailure(userProfilesResult);
         }
         return Ok(userProfilesResult.Value);
@@ -60,4 +59,7 @@ public class ProfilesController : ApiController
         }
         return NoContent();
     }
+
+    //TODO remove profile from user
+    // think about exposing permission crud operations for admin users
 }
