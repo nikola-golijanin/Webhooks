@@ -13,7 +13,7 @@ public sealed class WebhooksDbContext : DbContext
 
     public DbSet<User> Users { get; set; }
     public DbSet<Order> Orders { get; set; }
-    public DbSet<Role> Roles { get; set; }
+    public DbSet<Profile> Roles { get; set; }
     public DbSet<WebhookSubscription> WebhookSubscriptions { get; set; }
     public DbSet<WebhookDeliveryAttempt> WebhookDeliveryAttempts { get; set; }
 

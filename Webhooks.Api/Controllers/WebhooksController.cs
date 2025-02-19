@@ -18,11 +18,12 @@ public class WebhooksController : ApiController
     [HttpPost("subscriptions")]
     public IActionResult CreateSubscription([FromBody] CreateWebhookRequest request)
     {
-        var subscription = new WebhookSubscription(
-            Guid.NewGuid(),
-            request.EventType,
-            request.WebhookUrl,
-            DateTime.UtcNow);
+        var subscription = new WebhookSubscription
+        {
+            EventType = request.EventType,
+            WebhookUrl = request.WebhookUrl,
+            CreatedOnUtc = DateTime.UtcNow
+        };
 
         _context.WebhookSubscriptions.Add(subscription);
         _context.SaveChanges();

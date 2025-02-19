@@ -32,7 +32,6 @@ public sealed class WebhookTriggeredConsumer : IConsumer<WebhookTriggered>
 
         var payload = new WebhookPayload
         {
-            Id = Guid.NewGuid(),
             EventType = message.EventType,
             SubscriptionId = message.SubscriptionId,
             Timestamp = DateTime.UtcNow,
@@ -52,14 +51,13 @@ public sealed class WebhookTriggeredConsumer : IConsumer<WebhookTriggered>
                 response.StatusCode);
 
             var attempt = new WebhookDeliveryAttempt
-            (
-                Id: Guid.NewGuid(),
-                WebhookSubscriptionId: message.SubscriptionId,
-                Payload: jsonPayload,
-                ResponseStatusCode: (int)response.StatusCode,
-                Success: response.IsSuccessStatusCode,
-                Timestamp: DateTime.UtcNow
-            );
+            {
+                WebhookSubscriptionId = message.SubscriptionId,
+                Payload = jsonPayload,
+                ResponseStatusCode = (int)response.StatusCode,
+                Success = response.IsSuccessStatusCode,
+                Timestamp = DateTime.UtcNow
+            };
 
             _context.WebhookDeliveryAttempts.Add(attempt);
             await _context.SaveChangesAsync();
@@ -67,23 +65,21 @@ public sealed class WebhookTriggeredConsumer : IConsumer<WebhookTriggered>
         catch (Exception ex)
         {
             var attempt = new WebhookDeliveryAttempt
-            (
-                Id: Guid.NewGuid(),
-                WebhookSubscriptionId: message.SubscriptionId,
-                Payload: jsonPayload,
-                ResponseStatusCode: null,
-                Success: false,
-                Timestamp: DateTime.UtcNow
+            {
 
-            );
+                WebhookSubscriptionId = message.SubscriptionId,
+                Payload = jsonPayload,
+                ResponseStatusCode = null,
+                Success = false,
+                Timestamp = DateTime.UtcNow
+            };
 
             _logger.LogError(ex, "Webhook delivery to {WebhookUrl} failed. {SubscriptionId}",
-                message.WebhookUrl,
-                message.SubscriptionId);
+                        message.WebhookUrl,
+                        message.SubscriptionId);
 
             _context.WebhookDeliveryAttempts.Add(attempt);
             await _context.SaveChangesAsync();
         }
-
     }
 }

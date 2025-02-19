@@ -20,7 +20,7 @@ public class RoleManager : IRoleManager
     public async Task<Result> AssignRoleToUserAsync(int roleId, int userId, CancellationToken cancellationToken)
     {
         var user = await _context.Users
-            .Include(u => u.Roles)
+            .Include(u => u.Profiles)
             .FirstOrDefaultAsync(u => u.Id == userId, cancellationToken);
 
         if (user is null)
@@ -32,31 +32,31 @@ public class RoleManager : IRoleManager
         if (role is null)
             return Result.Failure(DomainErrors.Role.RoleNotFound(roleId));
 
-        user.Roles.Add(role);
+        user.Profiles.Add(role);
         await _context.SaveChangesAsync(cancellationToken);
         return Result.Success();
     }
 
-    public async Task<Result<HashSet<Role>>> GetRolesAsync(CancellationToken cancellationToken)
+    public async Task<Result<HashSet<Profile>>> GetRolesAsync(CancellationToken cancellationToken)
     {
         var roles = await _context.Roles
             .ToHashSetAsync(cancellationToken);
 
         if (roles.Count == 0)
-            return Result.Failure<HashSet<Role>>(DomainErrors.Role.NoRolesFound);
+            return Result.Failure<HashSet<Profile>>(DomainErrors.Role.NoRolesFound);
 
         return Result.Success(roles);
     }
 
-    public async Task<Result<HashSet<Role>>> GetUserRolesAsync(int userId, CancellationToken cancellationToken)
+    public async Task<Result<HashSet<Profile>>> GetUserRolesAsync(int userId, CancellationToken cancellationToken)
     {
         var userRoles = await _context.Users
                     .Where(u => u.Id == userId)
-                    .SelectMany(u => u.Roles)
+                    .SelectMany(u => u.Profiles)
                     .ToHashSetAsync(cancellationToken);
 
         if (userRoles.Count == 0)
-            return Result.Failure<HashSet<Role>>(DomainErrors.Role.NoRolesForUserFound(userId));
+            return Result.Failure<HashSet<Profile>>(DomainErrors.Role.NoRolesForUserFound(userId));
 
         return Result.Success(userRoles);
     }

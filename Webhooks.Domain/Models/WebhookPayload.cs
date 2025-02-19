@@ -1,11 +1,12 @@
+using System.ComponentModel.DataAnnotations.Schema;
+
 namespace Webhooks.Domain.Models;
 
-public class WebhookPayload
+public sealed record WebhookPayload
 {
-    public Guid Id { get; set; }
-    public string EventType { get; set; }
-    public Guid SubscriptionId { get; set; }
+    public int Id { get; set; }
+    public string EventType { get; set; } = string.Empty;
+    public int SubscriptionId { get; set; }
     public DateTime Timestamp { get; set; }
-    public object Data { get; set; }
-
+    public object Data { get; set; } = default!;
 }

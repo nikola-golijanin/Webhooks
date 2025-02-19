@@ -17,13 +17,13 @@ public class PermissionService
         var permissions = await _context.Database
             .SqlQuery<string>($@"
             SELECT 
-                p.""Name""
+                p.Name
             FROM permissions p 
-            INNER JOIN role_permissions rp ON 
-                p.""Id"" = rp.""PermissionId"" 
-            INNER JOIN role_users ru ON 
-                rp.""RoleId"" = ru.""RolesId"" 
-            WHERE ru.""UsersId"" = {userId}")
+            INNER JOIN profiles_permissions pp ON 
+                p.id = pp.permission_id 
+            INNER JOIN profiles_users pu  ON 
+                pp.profile_id = pu.profile_id 
+            WHERE pu.user_id = {userId}")
             .ToHashSetAsync();
 
         return permissions;

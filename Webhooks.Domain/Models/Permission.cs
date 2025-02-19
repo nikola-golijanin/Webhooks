@@ -1,7 +1,12 @@
+using System.ComponentModel.DataAnnotations.Schema;
+
 namespace Webhooks.Domain.Models;
 
-public record Permission(int Id, string Name)
+public class Permission
 {
-    public static readonly Permission AccessOrders = new(1, "AccessOrders");
-    public static readonly Permission ReadOrders = new(2, "ReadOrders");
+    [Column("id")]
+    public int Id { get; init; }
+
+    [Column("name")]
+    public string Name { get; init; } = string.Empty;
 };

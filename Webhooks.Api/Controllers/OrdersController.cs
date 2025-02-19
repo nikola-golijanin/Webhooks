@@ -28,8 +28,9 @@ public class OrdersController : ApiController
     }
 
     [HttpGet]
-    [HasPermission(Permission.ReadOrders)]
-    [Authorize]
+    // TODO use authorize attribute and instead of naming table roles, rename it to profiles, then you
+    // woudnt bother with policies.
+    [HasPermission([Permission.AccessOrders, Permission.ReadOrders])]
     public async Task<IActionResult> GetAllOrders()
     {
         var orders = await _context.Orders.ToListAsync();
@@ -39,12 +40,13 @@ public class OrdersController : ApiController
     [HttpPost]
     public async Task<IActionResult> CreateOrder([FromBody] CreateOrderRequest request)
     {
-        var order = new Order(
-            Guid.NewGuid(),
-            request.CustomerName,
+        var order = new Order
+        {
+            CustomerName = request.CustomerName,
+            Amount =
             request.Amount,
-            DateTime.UtcNow);
-
+            CreatedAtUtc = DateTime.UtcNow
+        };
         _context.Orders.Add(order);
 
         await _context.SaveChangesAsync();

@@ -5,8 +5,10 @@ namespace Webhooks.Infrastructure.Authentication;
 
 public class HasPermissionAttribute : AuthorizeAttribute
 {
-    public HasPermissionAttribute(Permission permission)
-        : base(policy: permission.ToString())
+    public HasPermissionAttribute(params Permission[] permissions)
+        : base()
     {
+        var permissionNames = permissions.Select(p => p.ToString());
+        Roles = string.Join(',', permissionNames);
     }
 }

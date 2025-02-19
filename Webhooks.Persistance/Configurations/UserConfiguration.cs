@@ -11,7 +11,7 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
         builder.ToTable("users");
         builder.HasKey(u => u.Id);
 
-        var defaultRoles = RoleConfiguration.GetDefaultRoles();
+        var defaultProfiles = ProfileConfiguration.GetDefaultProfiles();
 
         //add one admin user
         builder.HasData(new User
@@ -24,21 +24,21 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
         });
 
         // Configure the many-to-many relationship
-        builder.HasMany(u => u.Roles)
+        builder.HasMany(u => u.Profiles)
             .WithMany(r => r.Users)
             .UsingEntity<Dictionary<string, object>>(
-                "role_users",
-                r => r.HasOne<Role>().WithMany().HasForeignKey("RolesId"),
-                u => u.HasOne<User>().WithMany().HasForeignKey("UsersId"),
+                "profiles_users",
+                r => r.HasOne<Profile>().WithMany().HasForeignKey("profile_id"),
+                u => u.HasOne<User>().WithMany().HasForeignKey("user_id"),
                 je =>
                 {
-                    je.HasKey("RolesId", "UsersId");
+                    je.HasKey("profile_id", "user_id");
                     // Seed the join table data
                     je.HasData(
-                        defaultRoles.Select(role => new
+                        defaultProfiles.Select(profile => new
                         {
-                            UsersId = 1,
-                            RolesId = role.Id
+                            user_id = 1,
+                            profile_id = profile.Id
                         })
                     );
                 }

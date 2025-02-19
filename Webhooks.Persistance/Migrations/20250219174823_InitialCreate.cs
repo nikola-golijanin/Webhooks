@@ -21,40 +21,41 @@ namespace Webhooks.Persistance.Migrations
                 name: "orders",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    CustomerName = table.Column<string>(type: "text", nullable: false),
-                    Amount = table.Column<decimal>(type: "numeric", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                    id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    customer_name = table.Column<string>(type: "text", nullable: false),
+                    amount = table.Column<decimal>(type: "numeric", nullable: false),
+                    created_at_utc = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_orders", x => x.Id);
+                    table.PrimaryKey("PK_orders", x => x.id);
                 });
 
             migrationBuilder.CreateTable(
                 name: "permissions",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "integer", nullable: false)
+                    id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    Name = table.Column<string>(type: "text", nullable: false)
+                    name = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_permissions", x => x.Id);
+                    table.PrimaryKey("PK_permissions", x => x.id);
                 });
 
             migrationBuilder.CreateTable(
-                name: "roles",
+                name: "profiles",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "integer", nullable: false)
+                    id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    Name = table.Column<string>(type: "text", nullable: false)
+                    name = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_roles", x => x.Id);
+                    table.PrimaryKey("PK_profiles", x => x.id);
                 });
 
             migrationBuilder.CreateTable(
@@ -62,53 +63,54 @@ namespace Webhooks.Persistance.Migrations
                 schema: "webhooks",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    EventType = table.Column<string>(type: "text", nullable: false),
-                    WebhookUrl = table.Column<string>(type: "text", nullable: false),
-                    CreatedOnUtc = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                    id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    event_type = table.Column<string>(type: "text", nullable: false),
+                    webhook_url = table.Column<string>(type: "text", nullable: false),
+                    created_on_utc = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_subscriptions", x => x.Id);
+                    table.PrimaryKey("PK_subscriptions", x => x.id);
                 });
 
             migrationBuilder.CreateTable(
                 name: "users",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "integer", nullable: false)
+                    id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    Email = table.Column<string>(type: "text", nullable: false),
-                    FirstName = table.Column<string>(type: "text", nullable: false),
-                    LastName = table.Column<string>(type: "text", nullable: false),
-                    CreatedOnUtc = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                    email = table.Column<string>(type: "text", nullable: false),
+                    first_name = table.Column<string>(type: "text", nullable: false),
+                    last_name = table.Column<string>(type: "text", nullable: false),
+                    created_on_utc = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_users", x => x.Id);
+                    table.PrimaryKey("PK_users", x => x.id);
                 });
 
             migrationBuilder.CreateTable(
-                name: "role_permissions",
+                name: "profiles_permissions",
                 columns: table => new
                 {
-                    RoleId = table.Column<int>(type: "integer", nullable: false),
-                    PermissionId = table.Column<int>(type: "integer", nullable: false)
+                    profile_id = table.Column<int>(type: "integer", nullable: false),
+                    permission_id = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_role_permissions", x => new { x.RoleId, x.PermissionId });
+                    table.PrimaryKey("PK_profiles_permissions", x => new { x.profile_id, x.permission_id });
                     table.ForeignKey(
-                        name: "FK_role_permissions_permissions_PermissionId",
-                        column: x => x.PermissionId,
+                        name: "FK_profiles_permissions_permissions_permission_id",
+                        column: x => x.permission_id,
                         principalTable: "permissions",
-                        principalColumn: "Id",
+                        principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_role_permissions_roles_RoleId",
-                        column: x => x.RoleId,
-                        principalTable: "roles",
-                        principalColumn: "Id",
+                        name: "FK_profiles_permissions_profiles_profile_id",
+                        column: x => x.profile_id,
+                        principalTable: "profiles",
+                        principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -117,52 +119,53 @@ namespace Webhooks.Persistance.Migrations
                 schema: "webhooks",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    WebhookSubscriptionId = table.Column<Guid>(type: "uuid", nullable: false),
-                    Payload = table.Column<string>(type: "text", nullable: false),
-                    ResponseStatusCode = table.Column<int>(type: "integer", nullable: true),
-                    Success = table.Column<bool>(type: "boolean", nullable: false),
-                    Timestamp = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                    id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    webhook_subscription_id = table.Column<int>(type: "integer", nullable: false),
+                    payload = table.Column<string>(type: "text", nullable: false),
+                    response_status_code = table.Column<int>(type: "integer", nullable: true),
+                    success = table.Column<bool>(type: "boolean", nullable: false),
+                    timestamp = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_delivery_attempts", x => x.Id);
+                    table.PrimaryKey("PK_delivery_attempts", x => x.id);
                     table.ForeignKey(
-                        name: "FK_delivery_attempts_subscriptions_WebhookSubscriptionId",
-                        column: x => x.WebhookSubscriptionId,
+                        name: "FK_delivery_attempts_subscriptions_webhook_subscription_id",
+                        column: x => x.webhook_subscription_id,
                         principalSchema: "webhooks",
                         principalTable: "subscriptions",
-                        principalColumn: "Id",
+                        principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "role_users",
+                name: "profiles_users",
                 columns: table => new
                 {
-                    RolesId = table.Column<int>(type: "integer", nullable: false),
-                    UsersId = table.Column<int>(type: "integer", nullable: false)
+                    profile_id = table.Column<int>(type: "integer", nullable: false),
+                    user_id = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_role_users", x => new { x.RolesId, x.UsersId });
+                    table.PrimaryKey("PK_profiles_users", x => new { x.profile_id, x.user_id });
                     table.ForeignKey(
-                        name: "FK_role_users_roles_RolesId",
-                        column: x => x.RolesId,
-                        principalTable: "roles",
-                        principalColumn: "Id",
+                        name: "FK_profiles_users_profiles_profile_id",
+                        column: x => x.profile_id,
+                        principalTable: "profiles",
+                        principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_role_users_users_UsersId",
-                        column: x => x.UsersId,
+                        name: "FK_profiles_users_users_user_id",
+                        column: x => x.user_id,
                         principalTable: "users",
-                        principalColumn: "Id",
+                        principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.InsertData(
                 table: "permissions",
-                columns: new[] { "Id", "Name" },
+                columns: new[] { "id", "name" },
                 values: new object[,]
                 {
                     { 1, "AccessOrders" },
@@ -174,8 +177,8 @@ namespace Webhooks.Persistance.Migrations
                 });
 
             migrationBuilder.InsertData(
-                table: "roles",
-                columns: new[] { "Id", "Name" },
+                table: "profiles",
+                columns: new[] { "id", "name" },
                 values: new object[,]
                 {
                     { 1, "Admin" },
@@ -184,12 +187,12 @@ namespace Webhooks.Persistance.Migrations
 
             migrationBuilder.InsertData(
                 table: "users",
-                columns: new[] { "Id", "CreatedOnUtc", "Email", "FirstName", "LastName" },
+                columns: new[] { "id", "created_on_utc", "email", "first_name", "last_name" },
                 values: new object[] { 1, new DateTime(2021, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), "admin@admin.com", "Admin", "Admin" });
 
             migrationBuilder.InsertData(
-                table: "role_permissions",
-                columns: new[] { "PermissionId", "RoleId" },
+                table: "profiles_permissions",
+                columns: new[] { "permission_id", "profile_id" },
                 values: new object[,]
                 {
                     { 1, 1 },
@@ -201,8 +204,8 @@ namespace Webhooks.Persistance.Migrations
                 });
 
             migrationBuilder.InsertData(
-                table: "role_users",
-                columns: new[] { "RolesId", "UsersId" },
+                table: "profiles_users",
+                columns: new[] { "profile_id", "user_id" },
                 values: new object[,]
                 {
                     { 1, 1 },
@@ -210,20 +213,20 @@ namespace Webhooks.Persistance.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_delivery_attempts_WebhookSubscriptionId",
+                name: "IX_delivery_attempts_webhook_subscription_id",
                 schema: "webhooks",
                 table: "delivery_attempts",
-                column: "WebhookSubscriptionId");
+                column: "webhook_subscription_id");
 
             migrationBuilder.CreateIndex(
-                name: "IX_role_permissions_PermissionId",
-                table: "role_permissions",
-                column: "PermissionId");
+                name: "IX_profiles_permissions_permission_id",
+                table: "profiles_permissions",
+                column: "permission_id");
 
             migrationBuilder.CreateIndex(
-                name: "IX_role_users_UsersId",
-                table: "role_users",
-                column: "UsersId");
+                name: "IX_profiles_users_user_id",
+                table: "profiles_users",
+                column: "user_id");
         }
 
         /// <inheritdoc />
@@ -237,10 +240,10 @@ namespace Webhooks.Persistance.Migrations
                 name: "orders");
 
             migrationBuilder.DropTable(
-                name: "role_permissions");
+                name: "profiles_permissions");
 
             migrationBuilder.DropTable(
-                name: "role_users");
+                name: "profiles_users");
 
             migrationBuilder.DropTable(
                 name: "subscriptions",
@@ -250,7 +253,7 @@ namespace Webhooks.Persistance.Migrations
                 name: "permissions");
 
             migrationBuilder.DropTable(
-                name: "roles");
+                name: "profiles");
 
             migrationBuilder.DropTable(
                 name: "users");

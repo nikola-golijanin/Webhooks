@@ -29,7 +29,7 @@ public sealed class JwtProvider : IJwtProvider
         };
 
         var permissions = await _permissionService.GetPermissionsAsync(user.Id);
-        claims.AddRange(permissions.Select(permission => new Claim("permissions", permission)));
+        claims.AddRange(permissions.Select(permission => new Claim(ClaimTypes.Role, permission)));
 
         var signingCredentials = new SigningCredentials(
             new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtOptions.SecretKey)),

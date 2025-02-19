@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Webhooks.Application.Authentication;
 using Webhooks.Domain.Models;
@@ -8,7 +9,6 @@ using Permission = Webhooks.Domain.Enums.Permission;
 namespace Webhooks.Api.Controllers;
 
 [Route("api/[controller]")]
-[HasPermission(Permission.AccessRoles)]
 public class RolesController : ApiController
 {
     private readonly IRoleManager _roleManager;
@@ -26,7 +26,7 @@ public class RolesController : ApiController
     [HasPermission(Permission.ReadRoles)]
     public async Task<IActionResult> GetRolesAsync(CancellationToken cancellationToken)
     {
-        Result<HashSet<Role>> getRolesResult = await _roleManager.GetRolesAsync(cancellationToken);
+        Result<HashSet<Profile>> getRolesResult = await _roleManager.GetRolesAsync(cancellationToken);
         if (getRolesResult.IsFailure)
         {
             _logger.LogError("Failed to get roles. {ErrorCode}", getRolesResult.Error.Code);
