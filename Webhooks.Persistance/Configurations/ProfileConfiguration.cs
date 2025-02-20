@@ -27,10 +27,10 @@ public class ProfileConfiguration : IEntityTypeConfiguration<Profile>
     {
         return
         [
-            new Profile{ Id = 1,Name = "Admin"},
-            new Profile{ Id = 2,Name = "OrderManager"},
-            new Profile{ Id = 3,Name = "UserManager"},
-            new Profile{ Id = 4,Name = "Subscriber"}
+            new Profile { Id = 1, Name = "Admin" },
+            new Profile { Id = 2, Name = "OrderManager" },
+            new Profile { Id = 3, Name = "UserManager" },
+            new Profile { Id = 4, Name = "Subscriber" }
         ];
     }
 }

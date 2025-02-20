@@ -3,7 +3,7 @@ using System.Security.Claims;
 using System.Text;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
-using Webhooks.Application.Abstractions;
+using Webhooks.Application.Authentication;
 using Webhooks.Domain.Models;
 
 namespace Webhooks.Infrastructure.Authentication;
@@ -21,7 +21,6 @@ public sealed class JwtProvider : IJwtProvider
 
     public async Task<string> GenerateTokenAsync(User user)
     {
-
         var claims = new List<Claim>
         {
             new(JwtRegisteredClaimNames.Sub, user.Id.ToString()),

@@ -1,7 +1,6 @@
-using System;
 using Webhooks.Domain.Models;
 
-namespace Webhooks.Application.Abstractions;
+namespace Webhooks.Application.Authentication;
 
 public interface IJwtProvider
 {

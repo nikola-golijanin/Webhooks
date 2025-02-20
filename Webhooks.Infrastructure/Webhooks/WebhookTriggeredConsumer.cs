@@ -66,7 +66,6 @@ public sealed class WebhookTriggeredConsumer : IConsumer<WebhookTriggered>
         {
             var attempt = new WebhookDeliveryAttempt
             {
-
                 WebhookSubscriptionId = message.SubscriptionId,
                 Payload = jsonPayload,
                 ResponseStatusCode = null,
@@ -75,8 +74,8 @@ public sealed class WebhookTriggeredConsumer : IConsumer<WebhookTriggered>
             };
 
             _logger.LogError(ex, "Webhook delivery to {WebhookUrl} failed. {SubscriptionId}",
-                        message.WebhookUrl,
-                        message.SubscriptionId);
+                message.WebhookUrl,
+                message.SubscriptionId);
 
             _context.WebhookDeliveryAttempts.Add(attempt);
             await _context.SaveChangesAsync();

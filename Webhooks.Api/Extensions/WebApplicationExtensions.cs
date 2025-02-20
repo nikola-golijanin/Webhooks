@@ -25,5 +25,4 @@ public static class WebApplicationExtensions
     /// <returns>True if the environment name is Docker, otherwise false.</returns>
     public static bool IsDocker(this IWebHostEnvironment hostEnvironment) =>
         "Docker".Equals(hostEnvironment.EnvironmentName, StringComparison.OrdinalIgnoreCase);
-   
 }

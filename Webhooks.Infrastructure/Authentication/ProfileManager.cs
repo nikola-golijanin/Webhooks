@@ -9,7 +9,6 @@ namespace Webhooks.Infrastructure.Authentication;
 
 public class ProfileManager : IProfileManager
 {
-
     private readonly WebhooksDbContext _context;
 
     public ProfileManager(WebhooksDbContext context)
@@ -42,22 +41,20 @@ public class ProfileManager : IProfileManager
         var roles = await _context.Roles
             .ToHashSetAsync(cancellationToken);
 
-        if (roles.Count == 0)
-            return Result.Failure<HashSet<Profile>>(DomainErrors.Profile.NoProfilesFound);
-
-        return Result.Success(roles);
+        return roles.Count == 0
+            ? Result.Failure<HashSet<Profile>>(DomainErrors.Profile.NoProfilesFound)
+            : Result.Success(roles);
     }
 
     public async Task<Result<HashSet<Profile>>> GetUserProfilesAsync(int userId, CancellationToken cancellationToken)
     {
         var userRoles = await _context.Users
-                    .Where(u => u.Id == userId)
-                    .SelectMany(u => u.Profiles)
-                    .ToHashSetAsync(cancellationToken);
+            .Where(u => u.Id == userId)
+            .SelectMany(u => u.Profiles)
+            .ToHashSetAsync(cancellationToken);
 
-        if (userRoles.Count == 0)
-            return Result.Failure<HashSet<Profile>>(DomainErrors.Profile.NoProfilesForUserFound(userId));
-
-        return Result.Success(userRoles);
+        return userRoles.Count == 0
+            ? Result.Failure<HashSet<Profile>>(DomainErrors.Profile.NoProfilesForUserFound(userId))
+            : Result.Success(userRoles);
     }
 }

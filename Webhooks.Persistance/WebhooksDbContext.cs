@@ -1,7 +1,5 @@
 using Microsoft.EntityFrameworkCore;
-using Webhooks.Domain.Enums;
 using Webhooks.Domain.Models;
-using Permission = Webhooks.Domain.Models.Permission;
 
 namespace Webhooks.Persistance;
 

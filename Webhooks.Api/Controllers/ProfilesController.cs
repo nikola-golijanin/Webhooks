@@ -31,6 +31,7 @@ public class ProfilesController : ApiController
             _logger.LogError("Failed to get profiles. {ErrorCode}", profilesResult.Error.Code);
             return HandleFailure(profilesResult);
         }
+
         return Ok(profilesResult.Value);
     }
 
@@ -39,25 +40,25 @@ public class ProfilesController : ApiController
     public async Task<IActionResult> GetUserProfilesAsync(int userId, CancellationToken cancellationToken)
     {
         var userProfilesResult = await _profileManager.GetUserProfilesAsync(userId, cancellationToken);
-        if (userProfilesResult.IsFailure)
-        {
-            _logger.LogError("Failed to get profiles for user with id {UserId}. {ErrorCode}", userId, userProfilesResult.Error.Code);
-            return HandleFailure(userProfilesResult);
-        }
-        return Ok(userProfilesResult.Value);
+        if (userProfilesResult.IsSuccess) return Ok(userProfilesResult.Value);
+
+        _logger.LogError("Failed to get profiles for user with id {UserId}. {ErrorCode}", userId,
+            userProfilesResult.Error.Code);
+        return HandleFailure(userProfilesResult);
     }
 
     [HttpPost("{profileId:int}/assign/{userId:int}")]
     [HasPermission(Permission.AssignProfiles)]
-    public async Task<IActionResult> AssignProfileToUserAsync(int profileId, int userId, CancellationToken cancellationToken)
+    public async Task<IActionResult> AssignProfileToUserAsync(int profileId, int userId,
+        CancellationToken cancellationToken)
     {
-        Result assignProfileResult = await _profileManager.AssignProfileToUserAsync(profileId, userId, cancellationToken);
-        if (assignProfileResult.IsFailure)
-        {
-            _logger.LogError("Failed to assign profile with id {ProfileId} to user with id {UserId}. {ErrorCode}", profileId, userId, assignProfileResult.Error.Code);
-            return HandleFailure(assignProfileResult);
-        }
-        return NoContent();
+        Result assignProfileResult =
+            await _profileManager.AssignProfileToUserAsync(profileId, userId, cancellationToken);
+        if (assignProfileResult.IsSuccess) return NoContent();
+
+        _logger.LogError("Failed to assign profile with id {ProfileId} to user with id {UserId}. {ErrorCode}",
+            profileId, userId, assignProfileResult.Error.Code);
+        return HandleFailure(assignProfileResult);
     }
 
     //TODO remove profile from user

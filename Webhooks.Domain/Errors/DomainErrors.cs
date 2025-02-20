@@ -7,12 +7,12 @@ public static class DomainErrors
     public static class User
     {
         public static readonly Error InvalidCredentials = new(
-           "User.InvalidCredentials",
-           "The provided credentials are invalid");
+            "User.InvalidCredentials",
+            "The provided credentials are invalid");
 
         public static readonly Func<int, Error> UserNotFound = userId => new Error(
-                    "User.UserNotFound",
-                    $"User with id {userId} not found");
+            "User.UserNotFound",
+            $"User with id {userId} not found");
     }
 
     public static class Profile
@@ -28,6 +28,5 @@ public static class DomainErrors
         public static readonly Func<int, Error> ProfileNotFound = profileId => new Error(
             "Profile.ProfileNotFound",
             $"Profile with id {profileId} not found");
-
     }
 }

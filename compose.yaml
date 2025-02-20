@@ -16,12 +16,12 @@
       # OpenTelemetry 
       - OTEL_EXPORTER_OTLP_ENDPOINT=http://webhooks.aspire-dashboard:18889
     depends_on:
-      - webhooks.db 
+      - webhooks.db
       - webhooks.mq
-    ports: 
+    ports:
       - "8080:8080"
       - "7144:7144"
-      
+  
   webhooks.db:
     image: postgres:latest
     hostname: webhooks.db
@@ -33,7 +33,7 @@
       - ./.containers/database:/var/lib/postgresql/data
     ports:
       - "54320:5432" # Changed port to avoid conflict with local postgres
-      
+  
   webhooks.seq:
     image: datalust/seq:latest
     container_name: webhooks.seq
@@ -82,7 +82,7 @@
       - RabbitMQ__Password=guest
       # OpenTelemetry 
     depends_on:
-      - webhooks.db 
+      - webhooks.db
       - webhooks.mq
-    ports: 
+    ports:
       - "5153:5153"

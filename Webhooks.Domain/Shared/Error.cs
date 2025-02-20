@@ -1,5 +1,3 @@
-using System;
-
 namespace Webhooks.Domain.Shared;
 
 public class Error
@@ -21,15 +19,9 @@ public class Error
 
     public static bool operator ==(Error? a, Error? b)
     {
-        if (a is null && b is null)
-        {
-            return true;
-        }
+        if (a is null && b is null) return true;
 
-        if (a is null || b is null)
-        {
-            return false;
-        }
+        if (a is null || b is null) return false;
 
         return a.Equals(b);
     }
@@ -38,10 +30,7 @@ public class Error
 
     public virtual bool Equals(Error? other)
     {
-        if (other is null)
-        {
-            return false;
-        }
+        if (other is null) return false;
 
         return Code == other.Code && Message == other.Message;
     }
@@ -51,5 +40,4 @@ public class Error
     public override int GetHashCode() => HashCode.Combine(Code, Message);
 
     public override string ToString() => Code;
-
 }

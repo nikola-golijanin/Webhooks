@@ -1,5 +1,5 @@
 using Microsoft.EntityFrameworkCore;
-using Webhooks.Application.Abstractions;
+using Webhooks.Application.Authentication;
 using Webhooks.Domain.Errors;
 using Webhooks.Domain.Models;
 using Webhooks.Domain.Shared;

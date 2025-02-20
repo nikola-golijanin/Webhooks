@@ -6,8 +6,6 @@ namespace Webhooks.Api.Controllers;
 [ApiController]
 public abstract class ApiController : ControllerBase
 {
-
-
     protected IActionResult HandleFailure(Result result) =>
         result switch
         {

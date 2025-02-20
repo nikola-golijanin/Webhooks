@@ -41,14 +41,14 @@ public class OrdersController : ApiController
         var order = new Order
         {
             CustomerName = request.CustomerName,
-            Amount =
-            request.Amount,
+            Amount = request.Amount,
             CreatedAtUtc = DateTime.UtcNow
         };
         _context.Orders.Add(order);
 
         await _context.SaveChangesAsync();
-        _logger.LogInformation("Order created. {OrderId}, {CustomerName}, {Amount}", order.Id, order.CustomerName, order.Amount);
+        _logger.LogInformation("Order created. {OrderId}, {CustomerName}, {Amount}", order.Id, order.CustomerName,
+            order.Amount);
 
         await _webhookDispatcher.DispatchAsync("order.created", order);
         return Ok(order);

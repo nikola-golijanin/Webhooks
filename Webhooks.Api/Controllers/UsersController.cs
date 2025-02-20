@@ -19,7 +19,8 @@ public class UsersController : ApiController
     }
 
     [HttpPost("login")]
-    public async Task<IActionResult> LoginUserAsync([FromBody] LoginUserRequest request, CancellationToken cancellationToken)
+    public async Task<IActionResult> LoginUserAsync([FromBody] LoginUserRequest request,
+        CancellationToken cancellationToken)
     {
         Result<string> tokenResult = await _userService.LoginAsync(request.Email, cancellationToken);
 

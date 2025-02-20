@@ -19,9 +19,9 @@ public sealed class WebhookDispatchedConsumer : IConsumer<WebhookDispatched>
         var webhookDispatchedEvent = context.Message;
 
         var subscriptions = await _context.WebhookSubscriptions
-                    .AsNoTracking()
-                    .Where(ws => ws.EventType == webhookDispatchedEvent.EventType)
-                    .ToListAsync();
+            .AsNoTracking()
+            .Where(ws => ws.EventType == webhookDispatchedEvent.EventType)
+            .ToListAsync();
 
         foreach (var subscription in subscriptions)
         {
@@ -34,19 +34,6 @@ public sealed class WebhookDispatchedConsumer : IConsumer<WebhookDispatched>
             );
 
             await context.Publish(payload);
-
-
-            /* Another approach
-
-            await context.PublishBatch(subscriptions.Select(s => new WebhookTriggered
-            (
-                SubscriptionId: s.Id,
-                EventType: webhookDispatchedEvent.EventType,
-                WebhookUrl: s.WebhookUrl,
-                Payload: webhookDispatchedEvent.Data
-            )));
-
-            */
         }
     }
 }
