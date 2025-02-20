@@ -46,6 +46,30 @@ public class ProfileManager : IProfileManager
             : Result.Success(roles);
     }
 
+    public async Task<Result<HashSet<Profile>>> GetProfilesUserDoesNotContainAsync(int userId, CancellationToken cancellationToken)
+    {
+        var userWithProfiles = await _context.Users
+            .Where(u => u.Id == userId)
+            .Select(u => new UserIdWithProfileIds
+            (
+                u.Id,
+                u.Profiles.Select(p => p.Id).ToList()
+            ))
+            .FirstOrDefaultAsync(cancellationToken);
+
+        if (userWithProfiles is (int id, List<int> profileIds))
+        {
+            var profilesThatUserDoesNotContain = await _context.Set<Profile>()
+                .Where(p => !profileIds.Contains(p.Id))
+                .ToHashSetAsync(cancellationToken);
+            return Result.Success(profilesThatUserDoesNotContain);
+        }
+
+        return Result.Failure<HashSet<Profile>>(DomainErrors.User.InvalidCredentials);
+    }
+
+    public record UserIdWithProfileIds(int UserId, IEnumerable<int> ProfileIds);
+
     public async Task<Result<HashSet<Profile>>> GetUserProfilesAsync(int userId, CancellationToken cancellationToken)
     {
         var userRoles = await _context.Users

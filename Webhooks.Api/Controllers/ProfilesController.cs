@@ -35,6 +35,17 @@ public class ProfilesController : ApiController
         return Ok(profilesResult.Value);
     }
 
+    [HttpGet("{userId:int}/not-contained")]
+    public async Task<IActionResult> GetProfilesUserDoesNotContain(int userId, CancellationToken cancellationToken)
+    {
+        Result<HashSet<Profile>> profilesResult = await _profileManager.GetProfilesUserDoesNotContainAsync(userId, cancellationToken);
+        if (profilesResult.IsSuccess) return Ok(profilesResult.Value);
+
+        _logger.LogError("Failed to get profiles not contained by user with id {UserId}. {ErrorCode}", userId,
+            profilesResult.Error.Code);
+        return HandleFailure(profilesResult);
+    }
+
     [HttpGet("{userId:int}")]
     [HasPermission(Permission.ReadProfiles)]
     public async Task<IActionResult> GetUserProfilesAsync(int userId, CancellationToken cancellationToken)
@@ -46,6 +57,7 @@ public class ProfilesController : ApiController
             userProfilesResult.Error.Code);
         return HandleFailure(userProfilesResult);
     }
+
 
     [HttpPost("{profileId:int}/assign/{userId:int}")]
     [HasPermission(Permission.AssignProfiles)]
