@@ -86,4 +86,23 @@ public class ProfileManager : IProfileManager
             ? Result.Failure<HashSet<Profile>>(DomainErrors.Profile.NoProfilesForUserFound(userId))
             : Result.Success(userRoles);
     }
+
+    public async Task<Result> RemoveProfileFromUserAsync(int profileId, int userId, CancellationToken cancellationToken)
+    {
+        var user = await _context.Users
+            .Include(u => u.Profiles)
+            .FirstOrDefaultAsync(u => u.Id == userId, cancellationToken);
+
+        if (user is null)
+            return Result.Failure(DomainErrors.User.UserNotFound(userId));
+
+        var profileToRemove = user.Profiles.FirstOrDefault(p => p.Id == profileId);
+
+        if (profileToRemove is null)
+            return Result.Failure(DomainErrors.Profile.ProfileNotFound(profileId));
+
+        user.Profiles.Remove(profileToRemove);
+        await _context.SaveChangesAsync(cancellationToken);
+        return Result.Success();
+    }
 }

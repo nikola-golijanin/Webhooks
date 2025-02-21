@@ -76,6 +76,16 @@ public class ProfilesController : ApiController
         return HandleFailure(profilesResult);
     }
 
-    //TODO remove profile from user
+    [HttpDelete("{profileId:int}/remove/{userId:int}")]
+    public async Task<IActionResult> RemoveProfileFromUserAsync(int profileId, int userId,
+        CancellationToken cancellationToken)
+    {
+        var deleteProfileFromUserResult = await _profileManager.RemoveProfileFromUserAsync(profileId, userId, cancellationToken);
+        if(deleteProfileFromUserResult.IsSuccess) return NoContent();
+
+        _logger.LogError("Failed to remove profile with id {ProfileId} from user with id {UserId}. {ErrorCode}",
+            profileId, userId, deleteProfileFromUserResult.Error.Code);
+        return HandleFailure(deleteProfileFromUserResult);
+    }
     // think about exposing permission crud operations for admin users
 }
