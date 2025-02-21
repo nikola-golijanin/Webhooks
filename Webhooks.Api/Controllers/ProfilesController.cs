@@ -61,6 +61,21 @@ public class ProfilesController : ApiController
         return HandleFailure(assignProfileResult);
     }
 
+
+    [HttpGet("{userId:int}/not-contained")]
+    public async Task<IActionResult> GetProfilesUserDoesNotContainAsync(int userId, CancellationToken cancellationToken)
+    {
+        Result<HashSet<Profile>> profilesResult =
+            await _profileManager.GetProfilesUserDoesNotContainAsync(userId, cancellationToken);
+
+        if (profilesResult.IsSuccess) return Ok(profilesResult.Value);
+
+
+        _logger.LogError("Failed to get profiles user with id {UserId} does not contain. {ErrorCode}", userId,
+            profilesResult.Error.Code);
+        return HandleFailure(profilesResult);
+    }
+
     //TODO remove profile from user
     // think about exposing permission crud operations for admin users
 }

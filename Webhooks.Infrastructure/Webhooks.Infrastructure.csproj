@@ -7,12 +7,12 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="9.0.2"/>
-        <PackageReference Include="MassTransit.RabbitMQ" Version="8.3.6"/>
+        <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="9.0.2" />
+        <PackageReference Include="MassTransit.RabbitMQ" Version="8.3.6" />
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\Webhooks.Application\Webhooks.Application.csproj"/>
+        <ProjectReference Include="..\Webhooks.Application\Webhooks.Application.csproj" />
     </ItemGroup>
 
 </Project>

@@ -21,6 +21,10 @@ public static class DomainErrors
             "Profile.NoProfilesFound",
             "No profiles found");
 
+        public static readonly Func<int, Error> UserAssignedToAllProfiles = userId => new Error(
+            "Profile.UserAssignedToAllProfiles",
+            $"User with id {userId} is already assigned to all profiles");
+
         public static readonly Func<int, Error> NoProfilesForUserFound = userId => new Error(
             "Profile.NoProfilesForUserFound",
             $"No profiles found for user with id {userId}");
