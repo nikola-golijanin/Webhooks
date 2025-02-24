@@ -22,6 +22,7 @@ public class UsersController : ApiController
     public async Task<IActionResult> LoginUserAsync([FromBody] LoginUserRequest request,
         CancellationToken cancellationToken)
     {
+        _logger.LogInformation("Attempting to login user with email {Email}.", request.Email);
         Result<string> tokenResult = await _userService.LoginAsync(request.Email, cancellationToken);
 
         if (tokenResult.IsFailure)
@@ -30,8 +31,24 @@ public class UsersController : ApiController
             return HandleFailure(tokenResult);
         }
 
+        _logger.LogInformation("User with email {Email} logged in successfully.", request.Email);
         return Ok(tokenResult.Value);
     }
 
     //TODO register user
+    [HttpPost("register")]
+    public async Task<IActionResult> RegisterUserAsync([FromBody] RegisterUserRequest request,
+        CancellationToken cancellationToken)
+    {
+        _logger.LogInformation("Attempting to register user with email {Email}.", request.Email);
+        Result registerResult = await _userService.RegisterAsync(request.Email, cancellationToken);
+
+        if (registerResult.IsFailure)
+        {
+            _logger.LogError("Failed to register user with {Email}. {ErrorCode}", request.Email, registerResult.Error.Code);
+            return HandleFailure(registerResult);
+        }
+        _logger.LogInformation("User with email {Email} registered successfully.", request.Email);
+        return NoContent();
+    }
 }

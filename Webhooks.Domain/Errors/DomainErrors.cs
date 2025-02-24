@@ -13,6 +13,11 @@ public static class DomainErrors
         public static readonly Func<int, Error> UserNotFound = userId => new Error(
             "User.UserNotFound",
             $"User with id {userId} not found");
+
+
+        public static readonly Func<string, Error> EmailAlreadyExists = email => new Error(
+            "User.EmailAlreadyExists",
+            $"Email {email} already exists");
     }
 
     public static class Profile

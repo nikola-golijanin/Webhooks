@@ -29,4 +29,32 @@ public class UserService : IUserService
         var token = await _jwtProvider.GenerateTokenAsync(user);
         return token;
     }
+
+    public async Task<Result> RegisterAsync(string email, CancellationToken cancellationToken)
+    {
+        var emailAlreadyExists = await _context.Users
+            .AnyAsync(u => u.Email == email, cancellationToken);
+
+        if (emailAlreadyExists)
+            return Result.Failure(DomainErrors.User.EmailAlreadyExists(email));
+
+        var defaultProfile = await _context.Set<Profile>()
+            .FirstOrDefaultAsync(p => p.Name == "Subscriber", cancellationToken);
+
+        if (defaultProfile is null)
+            return Result.Failure(DomainErrors.Profile.NoProfilesFound);
+
+
+        var user = new User
+        {
+            Email = email,
+            CreatedOnUtc = DateTime.UtcNow,
+            Profiles = [defaultProfile]
+        };
+
+        await _context.Users.AddAsync(user, cancellationToken);
+        await _context.SaveChangesAsync(cancellationToken);
+        return Result.Success();
+        //TODO maybe after registration automatically login user
+    }
 }
