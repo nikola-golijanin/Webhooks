@@ -63,6 +63,7 @@ public class ProfilesController : ApiController
 
 
     [HttpGet("{userId:int}/not-contained")]
+    [HasPermission(Permission.ReadProfiles)]
     public async Task<IActionResult> GetProfilesUserDoesNotContainAsync(int userId, CancellationToken cancellationToken)
     {
         Result<HashSet<Profile>> profilesResult =
@@ -77,6 +78,7 @@ public class ProfilesController : ApiController
     }
 
     [HttpDelete("{profileId:int}/remove/{userId:int}")]
+    [HasPermission(Permission.AssignProfiles)]
     public async Task<IActionResult> RemoveProfileFromUserAsync(int profileId, int userId,
         CancellationToken cancellationToken)
     {
@@ -87,5 +89,4 @@ public class ProfilesController : ApiController
             profileId, userId, deleteProfileFromUserResult.Error.Code);
         return HandleFailure(deleteProfileFromUserResult);
     }
-    // think about exposing permission crud operations for admin users
 }
