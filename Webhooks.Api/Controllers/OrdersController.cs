@@ -30,7 +30,9 @@ public class OrdersController : ApiController
     [HasPermission(Permission.ReadOrders)]
     public async Task<IActionResult> GetAllOrders()
     {
+        _logger.LogInformation("Fetching all orders");
         var orders = await _context.Orders.ToListAsync();
+        _logger.LogInformation("Fetched {Count} orders.", orders.Count);
         return Ok(orders);
     }
 
@@ -38,6 +40,11 @@ public class OrdersController : ApiController
     [HasPermission(Permission.CreateOrders)]
     public async Task<IActionResult> CreateOrder([FromBody] CreateOrderRequest request)
     {
+        _logger.LogInformation(
+            "Creating order for {CustomerName} with amount {Amount}.",
+            request.CustomerName,
+            request.Amount);
+            
         var order = new Order
         {
             CustomerName = request.CustomerName,

@@ -25,6 +25,7 @@ public class ProfilesController : ApiController
     [HasPermission(Permission.ReadProfiles)]
     public async Task<IActionResult> GetProfilesAsync(CancellationToken cancellationToken)
     {
+        _logger.LogInformation("Getting all profiles.");
         Result<HashSet<Profile>> profilesResult = await _profileManager.GetProfilesAsync(cancellationToken);
         if (profilesResult.IsFailure)
         {
@@ -32,6 +33,7 @@ public class ProfilesController : ApiController
             return HandleFailure(profilesResult);
         }
 
+        _logger.LogInformation("Successfully retrieved profiles.");
         return Ok(profilesResult.Value);
     }
 
@@ -39,11 +41,15 @@ public class ProfilesController : ApiController
     [HasPermission(Permission.ReadProfiles)]
     public async Task<IActionResult> GetUserProfilesAsync(int userId, CancellationToken cancellationToken)
     {
+        _logger.LogInformation("Getting profiles for user with id {UserId}.", userId);
         var userProfilesResult = await _profileManager.GetUserProfilesAsync(userId, cancellationToken);
-        if (userProfilesResult.IsSuccess) return Ok(userProfilesResult.Value);
+        if (userProfilesResult.IsSuccess)
+        {
+            _logger.LogInformation("Successfully retrieved profiles for user with id {UserId}.", userId);
+            return Ok(userProfilesResult.Value);
+        }
 
-        _logger.LogError("Failed to get profiles for user with id {UserId}. {ErrorCode}", userId,
-            userProfilesResult.Error.Code);
+        _logger.LogError("Failed to get profiles for user with id {UserId}. {ErrorCode}", userId, userProfilesResult.Error.Code);
         return HandleFailure(userProfilesResult);
     }
 
@@ -52,9 +58,14 @@ public class ProfilesController : ApiController
     public async Task<IActionResult> AssignProfileToUserAsync(int profileId, int userId,
         CancellationToken cancellationToken)
     {
+        _logger.LogInformation("Assigning profile with id {ProfileId} to user with id {UserId}.", profileId, userId);
         Result assignProfileResult =
             await _profileManager.AssignProfileToUserAsync(profileId, userId, cancellationToken);
-        if (assignProfileResult.IsSuccess) return NoContent();
+        if (assignProfileResult.IsSuccess)
+        {
+            _logger.LogInformation("Successfully assigned profile with id {ProfileId} to user with id {UserId}.", profileId, userId);
+            return NoContent();
+        }
 
         _logger.LogError("Failed to assign profile with id {ProfileId} to user with id {UserId}. {ErrorCode}",
             profileId, userId, assignProfileResult.Error.Code);
@@ -66,10 +77,15 @@ public class ProfilesController : ApiController
     [HasPermission(Permission.ReadProfiles)]
     public async Task<IActionResult> GetProfilesUserDoesNotContainAsync(int userId, CancellationToken cancellationToken)
     {
+        _logger.LogInformation("Getting profiles not contained by user with id {UserId}.", userId);
         Result<HashSet<Profile>> profilesResult =
             await _profileManager.GetProfilesUserDoesNotContainAsync(userId, cancellationToken);
 
-        if (profilesResult.IsSuccess) return Ok(profilesResult.Value);
+        if (profilesResult.IsSuccess)
+        {
+            _logger.LogInformation("Successfully retrieved profiles not contained by user with id {UserId}.", userId);
+            return Ok(profilesResult.Value);
+        }
 
 
         _logger.LogError("Failed to get profiles user with id {UserId} does not contain. {ErrorCode}", userId,
@@ -82,8 +98,13 @@ public class ProfilesController : ApiController
     public async Task<IActionResult> RemoveProfileFromUserAsync(int profileId, int userId,
         CancellationToken cancellationToken)
     {
+        _logger.LogInformation("Removing profile with id {ProfileId} from user with id {UserId}.", profileId, userId);
         var deleteProfileFromUserResult = await _profileManager.RemoveProfileFromUserAsync(profileId, userId, cancellationToken);
-        if(deleteProfileFromUserResult.IsSuccess) return NoContent();
+        if (deleteProfileFromUserResult.IsSuccess)
+        {
+            _logger.LogInformation("Successfully removed profile with id {ProfileId} from user with id {UserId}.", profileId, userId);
+            return NoContent();
+        }
 
         _logger.LogError("Failed to remove profile with id {ProfileId} from user with id {UserId}. {ErrorCode}",
             profileId, userId, deleteProfileFromUserResult.Error.Code);
