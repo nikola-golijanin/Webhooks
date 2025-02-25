@@ -40,12 +40,8 @@ public class UserService : IUserService
 
         var defaultProfile = await _context.Set<Profile>()
             .FirstOrDefaultAsync(p => p.Name == "Subscriber", cancellationToken);
-        
-        //TODO add ArgumentNullException.ThrowIfNull(defaultProfile); instead of this check
-        //  because "Subscriber" profile must be in db
-        if (defaultProfile is null)
-            return Result.Failure(DomainErrors.Profile.NoProfilesFound);
 
+        ArgumentNullException.ThrowIfNull(defaultProfile, nameof(defaultProfile));
 
         var user = new User
         {
