@@ -25,6 +25,8 @@ public class ProfilesController : ApiController
     [HasPermission(Permission.ReadProfiles)]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
+    [EndpointSummary("Get all profiles.")]
+    [EndpointDescription("Retrieves all profiles.")]
     public async Task<IActionResult> GetProfilesAsync(CancellationToken cancellationToken)
     {
         _logger.LogInformation("Getting all profiles.");
@@ -43,7 +45,9 @@ public class ProfilesController : ApiController
     [HasPermission(Permission.ReadProfiles)]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> GetUserProfilesAsync(int userId, CancellationToken cancellationToken)
+    [EndpointSummary("Get profiles for a user.")]
+    [EndpointDescription("Retrieves profiles for the specified user ID.")]
+    public async Task<IActionResult> GetUserProfilesAsync([FromRoute] int userId, CancellationToken cancellationToken)
     {
         _logger.LogInformation("Getting profiles for user with id {UserId}.", userId);
         var userProfilesResult = await _profileManager.GetUserProfilesAsync(userId, cancellationToken);
@@ -61,7 +65,9 @@ public class ProfilesController : ApiController
     [HasPermission(Permission.AssignProfiles)]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> AssignProfileToUserAsync(int profileId, int userId,
+    [EndpointSummary("Assign a profile to a user.")]
+    [EndpointDescription("Assigns the specified profile to the specified user.")]
+    public async Task<IActionResult> AssignProfileToUserAsync([FromRoute] int profileId, [FromRoute] int userId,
         CancellationToken cancellationToken)
     {
         _logger.LogInformation("Assigning profile with id {ProfileId} to user with id {UserId}.", profileId, userId);
@@ -83,7 +89,9 @@ public class ProfilesController : ApiController
     [HasPermission(Permission.ReadProfiles)]
     [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> GetProfilesUserDoesNotContainAsync(int userId, CancellationToken cancellationToken)
+    [EndpointSummary("Get profiles not contained by a user.")]
+    [EndpointDescription("Retrieves profiles that are not contained by the specified user.")]
+    public async Task<IActionResult> GetProfilesUserDoesNotContainAsync([FromRoute] int userId, CancellationToken cancellationToken)
     {
         _logger.LogInformation("Getting profiles not contained by user with id {UserId}.", userId);
         Result<HashSet<Profile>> profilesResult =
@@ -105,7 +113,9 @@ public class ProfilesController : ApiController
     [HasPermission(Permission.AssignProfiles)]
     [ProducesResponseType(typeof(string), StatusCodes.Status204NoContent)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> RemoveProfileFromUserAsync(int profileId, int userId,
+    [EndpointSummary("Remove a profile from a user.")]
+    [EndpointDescription("Removes the specified profile from the specified user.")]
+    public async Task<IActionResult> RemoveProfileFromUserAsync([FromRoute] int profileId, [FromRoute] int userId,
         CancellationToken cancellationToken)
     {
         _logger.LogInformation("Removing profile with id {ProfileId} from user with id {UserId}.", profileId, userId);
