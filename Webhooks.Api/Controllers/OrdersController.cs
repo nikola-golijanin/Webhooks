@@ -28,6 +28,7 @@ public class OrdersController : ApiController
 
     [HttpGet]
     [HasPermission(Permission.ReadOrders)]
+    [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<IActionResult> GetAllOrders()
     {
         _logger.LogInformation("Fetching all orders");
@@ -38,13 +39,14 @@ public class OrdersController : ApiController
 
     [HttpPost]
     [HasPermission(Permission.CreateOrders)]
+    [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<IActionResult> CreateOrder([FromBody] CreateOrderRequest request)
     {
         _logger.LogInformation(
             "Creating order for {CustomerName} with amount {Amount}.",
             request.CustomerName,
             request.Amount);
-            
+
         var order = new Order
         {
             CustomerName = request.CustomerName,

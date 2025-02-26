@@ -23,6 +23,8 @@ public class ProfilesController : ApiController
 
     [HttpGet]
     [HasPermission(Permission.ReadProfiles)]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> GetProfilesAsync(CancellationToken cancellationToken)
     {
         _logger.LogInformation("Getting all profiles.");
@@ -39,6 +41,8 @@ public class ProfilesController : ApiController
 
     [HttpGet("{userId:int}")]
     [HasPermission(Permission.ReadProfiles)]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> GetUserProfilesAsync(int userId, CancellationToken cancellationToken)
     {
         _logger.LogInformation("Getting profiles for user with id {UserId}.", userId);
@@ -55,6 +59,8 @@ public class ProfilesController : ApiController
 
     [HttpPost("{profileId:int}/assign/{userId:int}")]
     [HasPermission(Permission.AssignProfiles)]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> AssignProfileToUserAsync(int profileId, int userId,
         CancellationToken cancellationToken)
     {
@@ -75,6 +81,8 @@ public class ProfilesController : ApiController
 
     [HttpGet("{userId:int}/not-contained")]
     [HasPermission(Permission.ReadProfiles)]
+    [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> GetProfilesUserDoesNotContainAsync(int userId, CancellationToken cancellationToken)
     {
         _logger.LogInformation("Getting profiles not contained by user with id {UserId}.", userId);
@@ -95,6 +103,8 @@ public class ProfilesController : ApiController
 
     [HttpDelete("{profileId:int}/remove/{userId:int}")]
     [HasPermission(Permission.AssignProfiles)]
+    [ProducesResponseType(typeof(string), StatusCodes.Status204NoContent)]
+    [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> RemoveProfileFromUserAsync(int profileId, int userId,
         CancellationToken cancellationToken)
     {

@@ -19,6 +19,8 @@ public class UsersController : ApiController
     }
 
     [HttpPost("login")]
+    [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> LoginUserAsync([FromBody] LoginUserRequest request,
         CancellationToken cancellationToken)
     {
@@ -37,6 +39,8 @@ public class UsersController : ApiController
 
     //TODO register user
     [HttpPost("register")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> RegisterUserAsync([FromBody] RegisterUserRequest request,
         CancellationToken cancellationToken)
     {
