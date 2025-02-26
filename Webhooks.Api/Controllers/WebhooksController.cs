@@ -21,7 +21,7 @@ public class WebhooksController : ApiController
 
     [HttpPost("subscriptions")]
     [HasPermission(Permission.CreateSubscriptions)]
-    [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(WebhookSubscription), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
     [EndpointSummary("Create a new webhook subscription.")]
     [EndpointDescription("Creates a new webhook subscription for the specified event type.")]

@@ -23,7 +23,7 @@ public class ProfilesController : ApiController
 
     [HttpGet]
     [HasPermission(Permission.ReadProfiles)]
-    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(HashSet<Profile>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
     [EndpointSummary("Get all profiles.")]
     [EndpointDescription("Retrieves all profiles.")]
@@ -43,7 +43,7 @@ public class ProfilesController : ApiController
 
     [HttpGet("{userId:int}")]
     [HasPermission(Permission.ReadProfiles)]
-    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(HashSet<Profile>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
     [EndpointSummary("Get profiles for a user.")]
     [EndpointDescription("Retrieves profiles for the specified user ID.")]
@@ -87,7 +87,7 @@ public class ProfilesController : ApiController
 
     [HttpGet("{userId:int}/not-contained")]
     [HasPermission(Permission.ReadProfiles)]
-    [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(HashSet<Profile>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
     [EndpointSummary("Get profiles not contained by a user.")]
     [EndpointDescription("Retrieves profiles that are not contained by the specified user.")]
@@ -111,7 +111,7 @@ public class ProfilesController : ApiController
 
     [HttpDelete("{profileId:int}/remove/{userId:int}")]
     [HasPermission(Permission.AssignProfiles)]
-    [ProducesResponseType(typeof(string), StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
     [EndpointSummary("Remove a profile from a user.")]
     [EndpointDescription("Removes the specified profile from the specified user.")]

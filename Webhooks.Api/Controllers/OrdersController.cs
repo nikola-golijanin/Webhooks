@@ -28,7 +28,7 @@ public class OrdersController : ApiController
 
     [HttpGet]
     [HasPermission(Permission.ReadOrders)]
-    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(List<Order>), StatusCodes.Status200OK)]
     [EndpointSummary("Get all orders.")]
     [EndpointDescription("Fetches all orders from the database.")]
     public async Task<IActionResult> GetAllOrders()
@@ -41,7 +41,7 @@ public class OrdersController : ApiController
 
     [HttpPost]
     [HasPermission(Permission.CreateOrders)]
-    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(Order), StatusCodes.Status200OK)]
     [EndpointSummary("Create a new order.")]
     [EndpointDescription("Creates a new order with the provided details.")]
     public async Task<IActionResult> CreateOrder([FromBody] CreateOrderRequest request)
