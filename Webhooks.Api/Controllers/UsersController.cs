@@ -39,7 +39,6 @@ public class UsersController : ApiController
         return Ok(tokenResult.Value);
     }
 
-    //TODO register user
     [HttpPost("register")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
@@ -49,13 +48,15 @@ public class UsersController : ApiController
         CancellationToken cancellationToken)
     {
         _logger.LogInformation("Attempting to register user with email {Email}.", request.Email);
-        Result registerResult = await _userService.RegisterAsync(request.Email, cancellationToken);
+        var registerResult = await _userService.RegisterAsync(request.Email, cancellationToken);
 
         if (registerResult.IsFailure)
         {
-            _logger.LogError("Failed to register user with {Email}. {ErrorCode}", request.Email, registerResult.Error.Code);
+            _logger.LogError("Failed to register user with {Email}. {ErrorCode}", request.Email,
+                registerResult.Error.Code);
             return HandleFailure(registerResult);
         }
+
         _logger.LogInformation("User with email {Email} registered successfully.", request.Email);
         return NoContent();
     }

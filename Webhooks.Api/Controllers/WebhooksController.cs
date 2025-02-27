@@ -25,7 +25,7 @@ public class WebhooksController : ApiController
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
     [EndpointSummary("Create a new webhook subscription.")]
     [EndpointDescription("Creates a new webhook subscription for the specified event type.")]
-    public IActionResult CreateSubscription([FromBody] CreateWebhookRequest request)
+    public async Task<IActionResult> CreateSubscriptionAsync([FromBody] CreateWebhookRequest request)
     {
         _logger.LogInformation("Creating webhook subscription for event type {EventType}.", request.EventType);
 
@@ -37,7 +37,7 @@ public class WebhooksController : ApiController
         };
 
         _context.WebhookSubscriptions.Add(subscription);
-        _context.SaveChanges();
+        await _context.SaveChangesAsync();
         _logger.LogInformation("Webhook subscription created with ID {SubscriptionId}.", subscription.Id);
         return Ok(subscription);
     }
