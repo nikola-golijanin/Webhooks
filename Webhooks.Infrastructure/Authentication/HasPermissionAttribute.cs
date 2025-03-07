@@ -5,10 +5,18 @@ namespace Webhooks.Infrastructure.Authentication;
 
 public class HasPermissionAttribute : AuthorizeAttribute
 {
-    public HasPermissionAttribute(params Permission[] permissions)
+    private static readonly AuthScheme[] DefaultAuthSchemes = [AuthScheme.WebhooksApi];
+
+    public HasPermissionAttribute(params Permission[] Permissions)
+        : this(DefaultAuthSchemes, Permissions)
+    {
+    }
+
+    public HasPermissionAttribute(AuthScheme[] AuthSchemes, params Permission[] Permissions)
         : base()
     {
-        var permissionNames = permissions.Select(p => p.ToString());
-        Roles = string.Join(',', permissionNames);
+        AuthenticationSchemes = string.Join(',', AuthSchemes.Select(s => s.ToString()));
+        if (Permissions.Length > 0)
+            Roles = string.Join(',', Permissions.Select(p => p.ToString()));
     }
 }

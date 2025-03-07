@@ -4,6 +4,7 @@ using Microsoft.IdentityModel.Tokens;
 using Serilog;
 using Webhooks.Api.Extensions;
 using Webhooks.Api.OptionsSetup;
+using Webhooks.Domain.Enums;
 using Webhooks.Infrastructure.Authentication;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -36,15 +37,25 @@ builder.Services.ConfigureOptions<JwtOptionsSetup>();
 //TODO
 // Add support for keycloak
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-    .AddJwtBearer(options => options.TokenValidationParameters = new TokenValidationParameters
+    .AddJwtBearer(AuthScheme.WebhooksApi.ToString(), options => options.TokenValidationParameters = new TokenValidationParameters
     {
         ValidateIssuer = true,
         ValidateAudience = true,
         ValidateLifetime = true,
         ValidateIssuerSigningKey = true,
-        ValidIssuer = builder.Configuration["Jwt:Issuer"],
-        ValidAudience = builder.Configuration["Jwt:Audience"],
-        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:SecretKey"]!))
+        ValidIssuer = builder.Configuration["Authentication:WebhooksApi:Issuer"],
+        ValidAudience = builder.Configuration["Authentication:WebhooksApi:Audience"],
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Authentication:WebhooksApi:SecretKey"]!))
+    })
+    .AddJwtBearer(AuthScheme.Keycloak.ToString(), options =>
+    {
+        options.RequireHttpsMetadata = false;
+        options.Audience = builder.Configuration["Authentication:Keycloak:Audience"];
+        options.MetadataAddress = builder.Configuration["Authentication:Keycloak:MetadataAddress"]!;
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidIssuer = builder.Configuration["Authentication:Keycloak:ValidIssuer"],
+        };
     });
 
 builder.Services.AddAuthorization();

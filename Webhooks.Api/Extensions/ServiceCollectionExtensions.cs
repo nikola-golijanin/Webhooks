@@ -42,7 +42,27 @@ public static class ServiceCollectionExtensions
                 BearerFormat = "JWT"
             };
 
+            var keycloak = new OpenApiSecurityScheme
+            {
+                Name = "Keycloak",
+                Description = "Keycloak Authorization header using the Bearer scheme.",
+                Type = SecuritySchemeType.OAuth2,
+                Flows = new OpenApiOAuthFlows
+                {
+                    Implicit = new OpenApiOAuthFlow
+                    {
+                        AuthorizationUrl = new Uri("http://localhost:18080/realms/myrealm/protocol/openid-connect/auth"),
+                        Scopes = new Dictionary<string, string>
+                        {
+                            { "openid", "OpenID Connect scope" },
+                            { "profile", "Profile scope" },
+                        }
+                    }
+                }
+            };
+
             o.AddSecurityDefinition(JwtBearerDefaults.AuthenticationScheme, securityScheme);
+            o.AddSecurityDefinition("Keycloak", keycloak);
 
             var securityRequirement = new OpenApiSecurityRequirement
             {
@@ -58,6 +78,24 @@ public static class ServiceCollectionExtensions
                     Array.Empty<string>()
                 }
             };
+            var keycloakRequirement = new OpenApiSecurityRequirement
+            {
+                {
+                    new OpenApiSecurityScheme
+                    {
+                        Reference = new OpenApiReference
+                        {
+                            Type = ReferenceType.SecurityScheme,
+                            Id = "Keycloak"
+                        },
+                        In = ParameterLocation.Header,
+                        Name = "Bearer",
+                        Scheme = "Bearer"
+                    },
+                    Array.Empty<string>()
+                }
+            };
+            o.AddSecurityRequirement(keycloakRequirement);
             o.AddSecurityRequirement(securityRequirement);
         });
     }

@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Webhooks.Api.Contracts.Webhooks;
+using Webhooks.Domain.Enums;
 using Webhooks.Domain.Models;
 using Webhooks.Infrastructure.Authentication;
 using Webhooks.Persistance;
@@ -20,7 +21,7 @@ public class WebhooksController : ApiController
     }
 
     [HttpPost("subscriptions")]
-    [HasPermission(Permission.CreateSubscriptions)]
+    [HasPermission(AuthSchemes: [AuthScheme.Keycloak, AuthScheme.WebhooksApi])]
     [ProducesResponseType(typeof(WebhookSubscription), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
     [EndpointSummary("Create a new webhook subscription.")]
