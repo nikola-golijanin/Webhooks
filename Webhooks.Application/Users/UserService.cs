@@ -1,9 +1,9 @@
-using Microsoft.EntityFrameworkCore;
 using Webhooks.Application.Authentication;
 using Webhooks.Domain.Errors;
 using Webhooks.Domain.Models;
 using Webhooks.Domain.Shared;
 using Webhooks.Persistance;
+using Webhooks.Persistance.Queries;
 
 namespace Webhooks.Application.Users;
 
@@ -20,8 +20,8 @@ public class UserService : IUserService
 
     public async Task<Result<string>> LoginAsync(string email, CancellationToken cancellationToken)
     {
-        User? user = await _context.Users
-            .FirstOrDefaultAsync(u => u.Email == email, cancellationToken);
+        var user = await _context.Users
+            .FindByEmailAsync(email, cancellationToken);
 
         if (user is null)
             return Result.Failure<string>(DomainErrors.User.InvalidCredentials);
@@ -30,16 +30,16 @@ public class UserService : IUserService
         return token;
     }
 
+
     public async Task<Result> RegisterAsync(string email, CancellationToken cancellationToken)
     {
-        var emailAlreadyExists = await _context.Users
-            .AnyAsync(u => u.Email == email, cancellationToken);
+        var emailAlreadyExists = await _context.Users.IsEmailRegisteredAsync(email, cancellationToken);
 
         if (emailAlreadyExists)
             return Result.Failure(DomainErrors.User.EmailAlreadyExists(email));
 
         var defaultProfile = await _context.Set<Profile>()
-            .FirstOrDefaultAsync(p => p.Name == "Subscriber", cancellationToken);
+            .GetDefaultProfileAsync(cancellationToken);
 
         ArgumentNullException.ThrowIfNull(defaultProfile, nameof(defaultProfile));
 
