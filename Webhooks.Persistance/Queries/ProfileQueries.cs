@@ -9,6 +9,7 @@ public static class ProfileQueries
         await query
             .Where(p => !profileIds.Contains(p.Id))
             .ToHashSetAsync(cancellationToken);
+            
     public static async Task<Profile?> GetProfileByIdAsync(this IQueryable<Profile> query, int profileId, CancellationToken cancellationToken) =>
         await query.FirstOrDefaultAsync(p => p.Id == profileId, cancellationToken);
 
