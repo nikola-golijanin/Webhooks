@@ -19,30 +19,30 @@ public class ProfileManager : IProfileManager
         _logger = logger;
     }
 
-    public async Task<Result> AssignProfileToUserAsync(int roleId, int userId, CancellationToken cancellationToken)
+    public async Task<Result> AssignProfileToUserAsync(int profileId, int userId, CancellationToken cancellationToken)
     {
         var user = await _context.Users.GetUserWithProfilesAsync(userId, cancellationToken);
 
         if (user is null)
             return Result.Failure(DomainErrors.User.UserNotFound(userId));
 
-        var role = await _context.Roles.GetRoleByIdAsync(roleId, cancellationToken);
+        var profile = await _context.Profiles.GetProfileByIdAsync(profileId, cancellationToken);
 
-        if (role is null)
-            return Result.Failure(DomainErrors.Profile.ProfileNotFound(roleId));
+        if (profile is null)
+            return Result.Failure(DomainErrors.Profile.ProfileNotFound(profileId));
 
-        user.Profiles.Add(role);
+        user.Profiles.Add(profile);
         await _context.SaveChangesAsync(cancellationToken);
         return Result.Success();
     }
 
     public async Task<Result<HashSet<Profile>>> GetProfilesAsync(CancellationToken cancellationToken)
     {
-        var roles = await _context.Roles.GetRolesAsync(cancellationToken);
+        var profiles = await _context.Profiles.GetProfilesAsync(cancellationToken);
 
-        return roles.Count == 0
+        return profiles.Count == 0
             ? Result.Failure<HashSet<Profile>>(DomainErrors.Profile.NoProfilesFound)
-            : Result.Success(roles);
+            : Result.Success(profiles);
     }
 
     public async Task<Result<HashSet<Profile>>> GetProfilesUserDoesNotContainAsync(int userId, CancellationToken cancellationToken)

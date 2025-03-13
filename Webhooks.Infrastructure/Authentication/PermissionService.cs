@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Webhooks.Persistance;
+using Webhooks.Persistance.Queries;
 
 namespace Webhooks.Infrastructure.Authentication;
 
@@ -15,15 +16,7 @@ public class PermissionService
     public async Task<HashSet<string>> GetPermissionsAsync(int userId)
     {
         var permissions = await _context.Database
-            .SqlQuery<string>($@"
-            SELECT 
-                p.Name
-            FROM permissions p 
-            INNER JOIN profiles_permissions pp ON 
-                p.id = pp.permission_id 
-            INNER JOIN profiles_users pu  ON 
-                pp.profile_id = pu.profile_id 
-            WHERE pu.user_id = {userId}")
+            .SqlQuery<string>(PermissionQueries.GetUserPermissions(userId))
             .ToHashSetAsync();
 
         return permissions;

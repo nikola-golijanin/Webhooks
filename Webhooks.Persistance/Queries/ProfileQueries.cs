@@ -19,4 +19,7 @@ public static class ProfileQueries
             await query.Where(u => u.Id == userId)
                 .SelectMany(u => u.Profiles)
                 .ToHashSetAsync(cancellationToken);
+    
+    public static async Task<HashSet<Profile>> GetProfilesAsync(this IQueryable<Profile> query, CancellationToken cancellationToken) =>
+            await query.ToHashSetAsync(cancellationToken);
 }
