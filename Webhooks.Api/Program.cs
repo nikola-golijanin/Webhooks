@@ -29,12 +29,10 @@ builder.Services.AddMassTransitServices(builder.Configuration);
 
 builder.Services.AddOpenTelemetryTracingAndMetrics();
 
-// TODO:
-// Add Permission Management. For example that you can assign permissions to roles
 builder.Services.ConfigureOptions<JwtOptionsSetup>();
 
-//TODO
-// Add support for keycloak
+//TODO: Migrate security to IdentityApi
+// Check it here: https://learn.microsoft.com/en-us/aspnet/core/security/authentication/identity?view=aspnetcore-9.0&tabs=visual-studio
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options => options.TokenValidationParameters = new TokenValidationParameters
     {

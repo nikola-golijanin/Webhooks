@@ -14,7 +14,11 @@ public static class WebApplicationExtensions
     {
         using var scope = app.Services.CreateScope();
         var db = scope.ServiceProvider.GetRequiredService<WebhooksDbContext>();
-        await db.Database.MigrateAsync();
+
+        var hasPendingMigrations = db.Database.GetPendingMigrations().Any();
+
+        if (hasPendingMigrations)
+            await db.Database.MigrateAsync();
     }
 
 
