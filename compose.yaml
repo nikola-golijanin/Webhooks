@@ -1,0 +1,18 @@
+# Please refer https://aka.ms/HTTPSinContainer on how to setup an https developer certificate for your ASP.NET Core service.
+
+services:
+  webhooksapi:
+    image: webhooksapi
+    container_name: webhooksapi
+    build:
+      context: .
+      dockerfile: Webhooks.API/Dockerfile
+    restart: unless-stopped
+    networks:
+      - homelab-network
+    ports:
+      - ${EXTERNAL_PORT}:5133
+      
+networks:
+  homelab-network:
+    external: true
