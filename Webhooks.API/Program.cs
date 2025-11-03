@@ -1,4 +1,5 @@
 using System.Threading.Channels;
+using MassTransit;
 using Microsoft.EntityFrameworkCore;
 using Webhooks.API.Data;
 using Webhooks.API.Extensions;
@@ -28,14 +29,23 @@ builder.Services.AddDbContext<WebhooksDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("WebhooksDatabase"));
 });
 
-builder.Services.AddHostedService<WebhookProcessor>();
-
-builder.Services.AddSingleton(_ =>
+builder.Services.AddMassTransit(busConfig =>
 {
-    return Channel.CreateBounded<WebhookDispatch>(new BoundedChannelOptions(100)
-    {
-        FullMode = BoundedChannelFullMode.Wait
-    });
+    busConfig.SetKebabCaseEndpointNameFormatter();
+
+    busConfig.AddConsumer<WebhookDispatchedConsumer>();
+    busConfig.AddConsumer<WebhookTriggeredConsumer>();
+
+    busConfig.UsingRabbitMq((context, config) =>
+        {
+            config.Host(builder.Configuration["RabbitMQ:Host"]!, host =>
+            {
+                host.Username(builder.Configuration["RabbitMQ:Username"]!);
+                host.Password(builder.Configuration["RabbitMQ:Password"]!);
+            });
+
+            config.ConfigureEndpoints(context);
+        });
 });
 
 var app = builder.Build();
@@ -47,7 +57,9 @@ if (app.Environment.IsDevelopment())
 }
 
 app.MapOpenApi();
+
 app.UseSwagger();
+
 app.UseSwaggerUI();
 
 app.UseHttpsRedirection();

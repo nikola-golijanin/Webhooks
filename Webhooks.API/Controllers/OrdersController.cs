@@ -30,7 +30,7 @@ public class OrdersController : ControllerBase
         );
 
         _orderRepository.Add(newOrder);
-        await _webhookDispatcher.ProcessAsync("order.created", newOrder);
+        await _webhookDispatcher.DispatchAsync("order.created", newOrder);
 
         return Ok(newOrder);
     }
