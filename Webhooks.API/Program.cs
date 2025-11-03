@@ -1,3 +1,4 @@
+using System.Threading.Channels;
 using Microsoft.EntityFrameworkCore;
 using Webhooks.API.Data;
 using Webhooks.API.Extensions;
@@ -11,7 +12,9 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddEndpointsApiExplorer();
+
 builder.Services.AddSwaggerGen();
+
 builder.Services.AddOpenApi();
 
 builder.Services.AddSingleton<InMemoryOrderRepository>();
@@ -25,6 +28,15 @@ builder.Services.AddDbContext<WebhooksDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("WebhooksDatabase"));
 });
 
+builder.Services.AddHostedService<WebhookProcessor>();
+
+builder.Services.AddSingleton(_ =>
+{
+    return Channel.CreateBounded<WebhookDispatch>(new BoundedChannelOptions(100)
+    {
+        FullMode = BoundedChannelFullMode.Wait
+    });
+});
 
 var app = builder.Build();
 

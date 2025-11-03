@@ -1,4 +1,5 @@
 using System.Text.Json;
+using System.Threading.Channels;
 using Microsoft.EntityFrameworkCore;
 using Webhooks.API.Data;
 using Webhooks.API.Models;
@@ -9,13 +10,22 @@ public sealed class WebhookDispatcher
 {
     private readonly IHttpClientFactory _httpClientFactory;
     private readonly WebhooksDbContext _dbContext;
+    private readonly Channel<WebhookDispatch> _channel;
 
-    public WebhookDispatcher(IHttpClientFactory httpClientFactory, WebhooksDbContext dbContext)
+    public WebhookDispatcher(IHttpClientFactory httpClientFactory, WebhooksDbContext dbContext, Channel<WebhookDispatch> channel)
     {
         _httpClientFactory = httpClientFactory;
         _dbContext = dbContext;
+        _channel = channel;
     }
+
     public async Task DispatchAsync<T>(string eventType, T data)
+        where T : notnull
+    {
+        await _channel.Writer.WriteAsync(new WebhookDispatch(eventType, data));
+    }
+
+    public async Task ProcessAsync<T>(string eventType, T data)
     {
         var subscriptions = await _dbContext.WebhookSubscriptions
             .AsNoTracking()
