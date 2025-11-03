@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Webhooks.API.Data;
 using Webhooks.API.Models;
+using Webhooks.API.Services;
 
 namespace Webhooks.API.Controllers;
 
@@ -9,10 +10,12 @@ namespace Webhooks.API.Controllers;
 public class WebhooksController : ControllerBase
 {
     private readonly WebhooksDbContext _dbContext;
+    private readonly WebhookDispatcher _webhookDispatcher;
 
-    public WebhooksController(WebhooksDbContext dbContext)
+    public WebhooksController(WebhooksDbContext dbContext, WebhookDispatcher webhookDispatcher)
     {
         _dbContext = dbContext;
+        _webhookDispatcher = webhookDispatcher;
     }
 
     [HttpPost("subscribtions")]
@@ -27,7 +30,16 @@ public class WebhooksController : ControllerBase
 
         _dbContext.WebhookSubscriptions.Add(newSubscription);
         _dbContext.SaveChanges();
-        
+
         return Ok(newSubscription);
     }
+
+    [HttpPost("publish")]
+    public async Task<IActionResult> PublishEvent([FromBody] PublishWebhookRequest request)
+    {
+        await _webhookDispatcher.DispatchAsync(request.EventType, request.Payload);
+        return Ok();
+    }
 }
+
+public record PublishWebhookRequest(string EventType, object Payload);
