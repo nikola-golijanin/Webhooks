@@ -1,5 +1,11 @@
 namespace Webhooks.API.Models;
 
-public sealed record WebhookSubscription(long Id, string WebhookUrl, string EventType, DateTime CreatedOnUtc);
+public class WebhookSubscription
+{
+    public long Id { get; set; }
+    public string WebhookUrl { get; set; }
+    public string EventType { get; set; }
+    public DateTime CreatedAt { get; set; }
+}
 
 public sealed record CreateWebhookRequest(string WebhookUrl, string EventType);

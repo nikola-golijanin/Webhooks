@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
+using Webhooks.API.Data;
 using Webhooks.API.Models;
-using Webhooks.API.Repositories;
 
 namespace Webhooks.API.Controllers;
 
@@ -8,25 +8,26 @@ namespace Webhooks.API.Controllers;
 [ApiController]
 public class WebhooksController : ControllerBase
 {
-    private readonly InMemoryWebhookSubscriptionRepository _subscriptionRepository;
+    private readonly WebhooksDbContext _dbContext;
 
-    public WebhooksController(InMemoryWebhookSubscriptionRepository subscriptionRepository)
+    public WebhooksController(WebhooksDbContext dbContext)
     {
-        _subscriptionRepository = subscriptionRepository;
+        _dbContext = dbContext;
     }
 
     [HttpPost("subscribtions")]
     public IActionResult CreateSubscription([FromBody] CreateWebhookRequest request)
     {
-        WebhookSubscription newSubscription = new WebhookSubscription(
-            Id: new Random().Next(1, 1000),
-            WebhookUrl: request.WebhookUrl,
-            EventType: request.EventType,
-            CreatedOnUtc: DateTime.UtcNow
-        );
+        WebhookSubscription newSubscription = new()
+        {
+            WebhookUrl = request.WebhookUrl,
+            EventType = request.EventType,
+            CreatedAt = DateTime.UtcNow
+        };
 
-        _subscriptionRepository.Add(newSubscription);
-
+        _dbContext.WebhookSubscriptions.Add(newSubscription);
+        _dbContext.SaveChanges();
+        
         return Ok(newSubscription);
     }
 }

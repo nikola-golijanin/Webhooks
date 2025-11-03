@@ -1,3 +1,6 @@
+using Microsoft.EntityFrameworkCore;
+using Webhooks.API.Data;
+using Webhooks.API.Extensions;
 using Webhooks.API.Repositories;
 using Webhooks.API.Services;
 
@@ -12,8 +15,16 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddOpenApi();
 
 builder.Services.AddSingleton<InMemoryOrderRepository>();
-builder.Services.AddSingleton<InMemoryWebhookSubscriptionRepository>();
-builder.Services.AddHttpClient<WebhookDispatcher>();
+
+builder.Services.AddHttpClient();
+
+builder.Services.AddScoped<WebhookDispatcher>();
+
+builder.Services.AddDbContext<WebhooksDbContext>(options =>
+{
+    options.UseNpgsql(builder.Configuration.GetConnectionString("WebhooksDatabase"));
+});
+
 
 var app = builder.Build();
 
@@ -23,7 +34,7 @@ if (app.Environment.IsDevelopment())
     app.MapOpenApi();
     app.UseSwagger();
     app.UseSwaggerUI();
-
+    await app.ApplyMigrationsAsync();
 }
 
 app.UseHttpsRedirection();
