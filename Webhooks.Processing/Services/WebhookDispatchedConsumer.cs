@@ -1,8 +1,9 @@
 using MassTransit;
 using Microsoft.EntityFrameworkCore;
-using Webhooks.API.Data;
+using Webhooks.Contracts;
+using Webhooks.Processing.Data;
 
-namespace Webhooks.API.Services;
+namespace Webhooks.Processing.Services;
 
 public sealed class WebhookDispatchedConsumer : IConsumer<WebhookDispatched>
 {
@@ -32,3 +33,4 @@ public sealed class WebhookDispatchedConsumer : IConsumer<WebhookDispatched>
         }
     }
 }
+

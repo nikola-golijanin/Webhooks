@@ -1,9 +1,11 @@
+using System;
 using System.Text.Json;
 using MassTransit;
-using Webhooks.API.Data;
-using Webhooks.API.Models;
+using Webhooks.Contracts;
+using Webhooks.Processing.Data;
+using Webhooks.Processing.Models;
 
-namespace Webhooks.API.Services;
+namespace Webhooks.Processing.Services;
 
 public sealed class WebhookTriggeredConsumer : IConsumer<WebhookTriggered>
 {

@@ -11,7 +11,19 @@ services:
     networks:
       - homelab-network
     ports:
-      - ${EXTERNAL_PORT}:5133
+      - ${EXTERNAL_PORT_API}:5133
+  
+  webhooksprocessing:
+    image: webhooksprocessing
+    container_name: webhooksprocessing
+    build:
+      context: .
+      dockerfile: Webhooks.Processing/Dockerfile
+    restart: unless-stopped
+    networks:
+      - homelab-network
+    ports:
+      - ${EXTERNAL_PORT_PROCESSING}:5133
       
 networks:
   homelab-network:

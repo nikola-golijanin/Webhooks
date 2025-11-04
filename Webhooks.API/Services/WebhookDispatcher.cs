@@ -1,4 +1,5 @@
 using MassTransit;
+using Webhooks.Contracts;
 
 namespace Webhooks.API.Services;
 

@@ -1,25 +1,15 @@
 using MassTransit;
 using Microsoft.EntityFrameworkCore;
-using Webhooks.API.Data;
-using Webhooks.API.Extensions;
-using Webhooks.API.Repositories;
-using Webhooks.API.Services;
+using Webhooks.Processing.Data;
+using Webhooks.Processing.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-
-builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
-builder.Services.AddEndpointsApiExplorer();
-
-builder.Services.AddSwaggerGen();
-
 builder.Services.AddOpenApi();
 
-builder.Services.AddSingleton<InMemoryOrderRepository>();
-
-builder.Services.AddScoped<WebhookDispatcher>();
+builder.Services.AddHttpClient();
 
 builder.Services.AddDbContext<WebhooksDbContext>(options =>
 {
@@ -29,6 +19,9 @@ builder.Services.AddDbContext<WebhooksDbContext>(options =>
 builder.Services.AddMassTransit(busConfig =>
 {
     busConfig.SetKebabCaseEndpointNameFormatter();
+
+    busConfig.AddConsumer<WebhookDispatchedConsumer>();
+    busConfig.AddConsumer<WebhookTriggeredConsumer>();
 
     busConfig.UsingRabbitMq((context, config) =>
         {
@@ -47,19 +40,9 @@ var app = builder.Build();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-    await app.ApplyMigrationsAsync();
+    app.MapOpenApi();
 }
 
-app.MapOpenApi();
-
-app.UseSwagger();
-
-app.UseSwaggerUI();
-
 app.UseHttpsRedirection();
-
-app.UseAuthorization();
-
-app.MapControllers();
 
 app.Run();
