@@ -47,6 +47,7 @@ builder.Services.AddOpenTelemetry()
             .AddAspNetCoreInstrumentation()
             .AddHttpClientInstrumentation()
             .AddNpgsql()
+            .AddSource(MassTransit.Logging.DiagnosticHeaders.DefaultListenerName)
             .AddOtlpExporter();
     });
 
