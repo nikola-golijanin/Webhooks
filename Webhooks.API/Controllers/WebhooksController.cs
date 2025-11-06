@@ -19,7 +19,7 @@ public class WebhooksController : ControllerBase
     }
 
     [HttpPost("subscribtions")]
-    public IActionResult CreateSubscription([FromBody] CreateWebhookRequest request)
+    public async Task<IActionResult> CreateSubscription([FromBody] CreateWebhookRequest request)
     {
         WebhookSubscription newSubscription = new()
         {
@@ -29,7 +29,7 @@ public class WebhooksController : ControllerBase
         };
 
         _dbContext.WebhookSubscriptions.Add(newSubscription);
-        _dbContext.SaveChanges();
+        await _dbContext.SaveChangesAsync();
 
         return Ok(newSubscription);
     }

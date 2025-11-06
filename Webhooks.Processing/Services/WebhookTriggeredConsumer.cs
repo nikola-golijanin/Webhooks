@@ -20,7 +20,7 @@ public sealed class WebhookTriggeredConsumer : IConsumer<WebhookTriggered>
 
     public async Task Consume(ConsumeContext<WebhookTriggered> context)
     {
-        using var _httpClient = _httpClientFactory.CreateClient();
+        var httpClient = _httpClientFactory.CreateClient("WebhookClient");
 
         var payload = new WebhookPayload
         {
@@ -31,38 +31,29 @@ public sealed class WebhookTriggeredConsumer : IConsumer<WebhookTriggered>
             Timestamp = DateTime.UtcNow,
             Data = context.Message.Data
         };
-        var jsonPayload = JsonSerializer.Serialize(payload);
+
+        var deliveryAttempt = new WebhookDeliveryAttempt
+        {
+            WebhookSubscriptionId = context.Message.SubscriptionId,
+            Payload = JsonSerializer.Serialize(payload),
+            CreatedAt = DateTime.UtcNow
+        };
 
         try
         {
-            var repsonse = await _httpClient.PostAsJsonAsync(context.Message.WebhookUrl, payload);
+            var repsonse = await httpClient.PostAsJsonAsync(context.Message.WebhookUrl, payload);
             repsonse.EnsureSuccessStatusCode();
 
-            var deliveryAttempt = new WebhookDeliveryAttempt
-            {
-                WebhookSubscriptionId = context.Message.SubscriptionId,
-                Payload = jsonPayload,
-                ReponseStatusCode = (int)repsonse.StatusCode,
-                Success = repsonse.IsSuccessStatusCode,
-                CreatedAt = DateTime.UtcNow
-            };
-
-            _dbContext.WebhookDeliveryAttempts.Add(deliveryAttempt);
-            await _dbContext.SaveChangesAsync();
+            deliveryAttempt.ReponseStatusCode = (int)repsonse.StatusCode;
+            deliveryAttempt.Success = repsonse.IsSuccessStatusCode;
         }
         catch (Exception)
         {
-            var deliveryAttempt = new WebhookDeliveryAttempt
-            {
-                WebhookSubscriptionId = context.Message.SubscriptionId,
-                Payload = jsonPayload,
-                ReponseStatusCode = null,
-                Success = false,
-                CreatedAt = DateTime.UtcNow
-            };
-
-            _dbContext.WebhookDeliveryAttempts.Add(deliveryAttempt);
-            await _dbContext.SaveChangesAsync();
+            deliveryAttempt.ReponseStatusCode = null;
+            deliveryAttempt.Success = false;
         }
+
+        _dbContext.WebhookDeliveryAttempts.Add(deliveryAttempt);
+        await _dbContext.SaveChangesAsync();
     }
 }
