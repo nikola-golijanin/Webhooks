@@ -32,7 +32,7 @@ builder.Services.AddDbContext<WebhooksDbContext>(options =>
 });
 
 builder.Services.AddOpenTelemetry()
-    .ConfigureResource(resource => resource.AddService("Webhooks.API"))
+    // .ConfigureResource(resource => resource.AddService("Webhooks.API")) // Its set as env variable OTEL_RESOURCE_ATTRIBUTES
     .WithMetrics(metrics =>
     {
         metrics
