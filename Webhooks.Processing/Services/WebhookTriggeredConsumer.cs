@@ -41,11 +41,11 @@ public sealed class WebhookTriggeredConsumer : IConsumer<WebhookTriggered>
 
         try
         {
-            var repsonse = await httpClient.PostAsJsonAsync(context.Message.WebhookUrl, payload);
-            repsonse.EnsureSuccessStatusCode();
+            var response = await httpClient.PostAsJsonAsync(context.Message.WebhookUrl, payload);
+            response.EnsureSuccessStatusCode();
 
-            deliveryAttempt.ReponseStatusCode = (int)repsonse.StatusCode;
-            deliveryAttempt.Success = repsonse.IsSuccessStatusCode;
+            deliveryAttempt.ReponseStatusCode = (int)response.StatusCode;
+            deliveryAttempt.Success = response.IsSuccessStatusCode;
         }
         catch (Exception)
         {
