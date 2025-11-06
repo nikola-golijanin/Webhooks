@@ -1,5 +1,10 @@
 using MassTransit;
 using Microsoft.EntityFrameworkCore;
+using Npgsql;
+using OpenTelemetry.Logs;
+using OpenTelemetry.Metrics;
+using OpenTelemetry.Resources;
+using OpenTelemetry.Trace;
 using Webhooks.Processing.Data;
 using Webhooks.Processing.Services;
 
@@ -14,6 +19,32 @@ builder.Services.AddHttpClient();
 builder.Services.AddDbContext<WebhooksDbContext>(options =>
 {
     options.UseNpgsql(builder.Configuration.GetConnectionString("WebhooksDatabase"));
+});
+
+builder.Services.AddOpenTelemetry()
+    .ConfigureResource(resource => resource.AddService("Webhooks.Processing"))
+    .WithMetrics(metrics =>
+    {
+        metrics
+            .AddAspNetCoreInstrumentation()
+            .AddHttpClientInstrumentation()
+            .AddNpgsqlInstrumentation()
+            .AddOtlpExporter();
+    })
+    .WithTracing(tracing =>
+    {
+        tracing
+            .AddAspNetCoreInstrumentation()
+            .AddHttpClientInstrumentation()
+            .AddNpgsql()
+            .AddOtlpExporter();
+    });
+
+builder.Logging.AddOpenTelemetry(options =>
+{
+    options.IncludeFormattedMessage = true;
+    options.IncludeScopes = true;
+    options.AddOtlpExporter();
 });
 
 builder.Services.AddMassTransit(busConfig =>
