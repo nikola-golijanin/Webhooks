@@ -22,7 +22,7 @@ public class OrdersController : ControllerBase
     public async Task<IActionResult> CreateOrderAsync([FromBody] CreateOrderRequest request)
     {
         // In a real application, you would save the order to a database here.
-        var newOrder = new Models.Order(
+        var newOrder = new Order(
             Id: new Random().Next(1, 1000),
             CustomerName: request.CustomerName,
             Amount: request.Amount,
