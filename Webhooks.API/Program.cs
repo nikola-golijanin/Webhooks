@@ -3,7 +3,6 @@ using Microsoft.EntityFrameworkCore;
 using Npgsql;
 using OpenTelemetry.Logs;
 using OpenTelemetry.Metrics;
-using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
 using Webhooks.API.Data;
 using Webhooks.API.Extensions;
