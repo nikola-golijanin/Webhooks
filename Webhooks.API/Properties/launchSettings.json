@@ -10,7 +10,7 @@
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development",
         "OTEL_EXPORTER_OTLP_ENDPOINT": "http://192.168.0.12:18889",
-        "OTEL_RESOURCE_ATTRIBUTES": "service.name=webhooks-processing-local"
+        "OTEL_RESOURCE_ATTRIBUTES": "service.name=webhooks-api-local"
       }
     },
     "https": {
