@@ -18,6 +18,7 @@ public sealed class WebhooksDbContext : DbContext
         {
             builder.ToTable("subscriptions", "webhooks");
             builder.HasKey(ws => ws.Id);
+            builder.HasIndex(ws => ws.EventType);
         });
 
         modelBuilder.Entity<WebhookDeliveryAttempt>(builder =>

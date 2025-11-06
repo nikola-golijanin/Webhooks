@@ -23,7 +23,7 @@ public class OrdersController : ControllerBase
     {
         // In a real application, you would save the order to a database here.
         var newOrder = new Order(
-            Id: new Random().Next(1, 1000),
+            Id: Random.Shared.Next(1, 1000),
             CustomerName: request.CustomerName,
             Amount: request.Amount,
             CreatedAt: DateTime.UtcNow

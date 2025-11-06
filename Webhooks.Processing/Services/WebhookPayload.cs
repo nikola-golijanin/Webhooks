@@ -6,5 +6,5 @@ public class WebhookPayload
     public string EventType { get; set; } = string.Empty;
     public long SubscriptionId { get; set; }
     public DateTime Timestamp { get; set; }
-    public object Data { get; set; } 
+    public required object Data { get; set; } 
 }
