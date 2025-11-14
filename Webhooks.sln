@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 17
-VisualStudioVersion = 17.0.31903.59
+# Visual Studio Version 18
+VisualStudioVersion = 18.0.11205.157 d18.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Webhooks.API", "Webhooks.API\Webhooks.API.csproj", "{6F914815-3A4F-4AA8-B6A6-69D6A7C2FCA2}"
 EndProject
@@ -9,13 +9,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Webhooks.Processing", "Webh
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Webhooks.Contracts", "Webhooks.Contracts\Webhooks.Contracts.csproj", "{DFC53FF6-7B39-4A75-AEEB-C51BE8C0B6A8}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{431C8025-D34A-4EA6-9990-D6FD8125659D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
-	EndGlobalSection
-	GlobalSection(SolutionProperties) = preSolution
-		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{6F914815-3A4F-4AA8-B6A6-69D6A7C2FCA2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -30,5 +29,16 @@ Global
 		{DFC53FF6-7B39-4A75-AEEB-C51BE8C0B6A8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DFC53FF6-7B39-4A75-AEEB-C51BE8C0B6A8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DFC53FF6-7B39-4A75-AEEB-C51BE8C0B6A8}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{6F914815-3A4F-4AA8-B6A6-69D6A7C2FCA2} = {431C8025-D34A-4EA6-9990-D6FD8125659D}
+		{4A1D06B6-87B9-4E66-9988-794B3AAAEA98} = {431C8025-D34A-4EA6-9990-D6FD8125659D}
+		{DFC53FF6-7B39-4A75-AEEB-C51BE8C0B6A8} = {431C8025-D34A-4EA6-9990-D6FD8125659D}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {4DAD0E0A-F0F1-4B01-BC34-E3EF279BC9EE}
 	EndGlobalSection
 EndGlobal
