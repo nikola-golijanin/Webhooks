@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Webhooks.API.Data;
+using Webhooks.API.Dtos;
 using Webhooks.API.Models;
 using Webhooks.API.Services;
 
@@ -41,5 +42,3 @@ public class WebhooksController : ControllerBase
         return Ok();
     }
 }
-
-public record PublishWebhookRequest(string EventType, object Payload);
