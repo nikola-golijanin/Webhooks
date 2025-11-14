@@ -7,5 +7,3 @@ public class WebhookSubscription
     public string EventType { get; set; } = string.Empty;
     public DateTime CreatedAt { get; set; }
 }
-
-public sealed record CreateWebhookRequest(string WebhookUrl, string EventType);
