@@ -6,6 +6,7 @@ using OpenTelemetry.Metrics;
 using OpenTelemetry.Trace;
 using Webhooks.API.Data;
 using Webhooks.API.Extensions;
+using Webhooks.API.Infrastructure;
 using Webhooks.API.Repositories;
 using Webhooks.API.Services;
 
@@ -18,6 +19,9 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 
 builder.Services.AddSwaggerGen();
+
+builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
+builder.Services.AddProblemDetails();
 
 builder.Services.AddOpenApi();
 
@@ -80,6 +84,9 @@ if (app.Environment.IsDevelopment())
 {
     await app.ApplyMigrationsAsync();
 }
+
+app.UseExceptionHandler();
+app.UseStatusCodePages();
 
 app.MapOpenApi();
 
