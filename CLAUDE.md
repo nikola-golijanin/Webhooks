@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-This is a webhook management system built with .NET 9 using an event-driven architecture. The system allows applications to publish events and dispatch them to subscribed webhook URLs asynchronously using RabbitMQ message queues.
+This is a webhook management system built with .NET 10 using an event-driven architecture. The system allows applications to publish events and dispatch them to subscribed webhook URLs asynchronously using RabbitMQ message queues.
 
 ## Solution Structure
 

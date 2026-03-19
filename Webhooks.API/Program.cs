@@ -67,11 +67,15 @@ builder.Services.AddMassTransit(busConfig =>
 
     busConfig.UsingRabbitMq((context, config) =>
         {
-            config.Host(builder.Configuration["RabbitMQ:Host"]!, host =>
-            {
-                host.Username(builder.Configuration["RabbitMQ:Username"]!);
-                host.Password(builder.Configuration["RabbitMQ:Password"]!);
-            });
+            var rabbitUri = builder.Configuration.GetConnectionString("rabbitmq");
+            if (rabbitUri is not null)
+                config.Host(new Uri(rabbitUri));
+            else
+                config.Host(builder.Configuration["RabbitMQ:Host"]!, host =>
+                {
+                    host.Username(builder.Configuration["RabbitMQ:Username"]!);
+                    host.Password(builder.Configuration["RabbitMQ:Password"]!);
+                });
 
             config.ConfigureEndpoints(context);
         });
