@@ -13,5 +13,6 @@
   <ItemGroup>
     <ProjectReference Include="..\Webhooks.API\Webhooks.API.csproj" />
     <ProjectReference Include="..\Webhooks.Processing\Webhooks.Processing.csproj" />
+    <ProjectReference Include="..\Webhooks.TestListener\Webhooks.TestListener.csproj" />
   </ItemGroup>
 </Project>

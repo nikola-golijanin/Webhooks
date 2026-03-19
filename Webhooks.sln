@@ -22,6 +22,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Webhooks.API.IntegrationTes
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Webhooks.AppHost", "Webhooks.AppHost\Webhooks.AppHost.csproj", "{FC504B91-70FB-4E57-AD6F-56102BE6D0BA}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Webhooks.TestListener", "Webhooks.TestListener\Webhooks.TestListener.csproj", "{A1E56E03-F7F4-455E-8BE2-829FF758A603}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -92,6 +94,18 @@ Global
 		{FC504B91-70FB-4E57-AD6F-56102BE6D0BA}.Release|x64.Build.0 = Release|Any CPU
 		{FC504B91-70FB-4E57-AD6F-56102BE6D0BA}.Release|x86.ActiveCfg = Release|Any CPU
 		{FC504B91-70FB-4E57-AD6F-56102BE6D0BA}.Release|x86.Build.0 = Release|Any CPU
+		{A1E56E03-F7F4-455E-8BE2-829FF758A603}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A1E56E03-F7F4-455E-8BE2-829FF758A603}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A1E56E03-F7F4-455E-8BE2-829FF758A603}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{A1E56E03-F7F4-455E-8BE2-829FF758A603}.Debug|x64.Build.0 = Debug|Any CPU
+		{A1E56E03-F7F4-455E-8BE2-829FF758A603}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{A1E56E03-F7F4-455E-8BE2-829FF758A603}.Debug|x86.Build.0 = Debug|Any CPU
+		{A1E56E03-F7F4-455E-8BE2-829FF758A603}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A1E56E03-F7F4-455E-8BE2-829FF758A603}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A1E56E03-F7F4-455E-8BE2-829FF758A603}.Release|x64.ActiveCfg = Release|Any CPU
+		{A1E56E03-F7F4-455E-8BE2-829FF758A603}.Release|x64.Build.0 = Release|Any CPU
+		{A1E56E03-F7F4-455E-8BE2-829FF758A603}.Release|x86.ActiveCfg = Release|Any CPU
+		{A1E56E03-F7F4-455E-8BE2-829FF758A603}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

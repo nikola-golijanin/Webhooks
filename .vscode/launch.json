@@ -1,39 +1,56 @@
-{
-    "version": "0.2.0",
-    "configurations": [
-        {
-            "name": ".NET Core Launch (web)",
-            "type": "coreclr",
-            "request": "launch",
-            "preLaunchTask": "build",
-            "program": "${workspaceFolder}/Webhooks.API/bin/Debug/net9.0/Webhooks.API.dll",
-            "args": [],
-            "cwd": "${workspaceFolder}/Webhooks.API",
-            "stopAtEntry": false,
-            "serverReadyAction": {
-                "action": "openExternally",
-                "pattern": "\\bNow listening on:\\s+(https?://\\S+)"
-            },
-            "env": {
-                "ASPNETCORE_ENVIRONMENT": "Development"
-            },
-            "sourceFileMap": {
-                "/Views": "${workspaceFolder}/Views"
-            }
-        },
-        {
-            "name": ".NET Core Attach",
-            "type": "coreclr",
-            "request": "attach"
-        },
-        {
-            "name": "Containers: .NET Launch",
-            "type": "docker",
-            "request": "launch",
-            "preLaunchTask": "docker-run: debug",
-            "netCore": {
-                "appProject": "${workspaceFolder}/Webhooks.API/Webhooks.API.csproj"
-            }
-        }
-    ]
-}
+// {
+//     "version": "0.2.0",
+//     "configurations": [
+//         {
+//             "name": "Webhooks.AppHost (http)",
+//             "type": "coreclr",
+//             "request": "launch",
+//             "preLaunchTask": "build",
+//             "program": "${workspaceFolder}/Webhooks.AppHost/bin/Debug/net10.0/Webhooks.AppHost.dll",
+//             "args": [],
+//             "cwd": "${workspaceFolder}/Webhooks.AppHost",
+//             "stopAtEntry": false,
+//             "env": {
+//                 "ASPNETCORE_ENVIRONMENT": "Development",
+//                 "DOTNET_ENVIRONMENT": "Development",
+//                 "ASPNETCORE_URLS": "http://localhost:15214",
+//                 "ASPIRE_DASHBOARD_OTLP_HTTP_ENDPOINT_URL": "http://localhost:4317",
+//                 "ASPIRE_ALLOW_UNSECURED_TRANSPORT": "true"
+//             }
+//         },
+//         {
+//             "name": ".NET Core Launch (web)",
+//             "type": "coreclr",
+//             "request": "launch",
+//             "preLaunchTask": "build",
+//             "program": "${workspaceFolder}/Webhooks.API/bin/Debug/net10.0/Webhooks.API.dll",
+//             "args": [],
+//             "cwd": "${workspaceFolder}/Webhooks.API",
+//             "stopAtEntry": false,
+//             "serverReadyAction": {
+//                 "action": "openExternally",
+//                 "pattern": "\\bNow listening on:\\s+(https?://\\S+)"
+//             },
+//             "env": {
+//                 "ASPNETCORE_ENVIRONMENT": "Development"
+//             },
+//             "sourceFileMap": {
+//                 "/Views": "${workspaceFolder}/Views"
+//             }
+//         },
+//         {
+//             "name": ".NET Core Attach",
+//             "type": "coreclr",
+//             "request": "attach"
+//         },
+//         {
+//             "name": "Containers: .NET Launch",
+//             "type": "docker",
+//             "request": "launch",
+//             "preLaunchTask": "docker-run: debug",
+//             "netCore": {
+//                 "appProject": "${workspaceFolder}/Webhooks.API/Webhooks.API.csproj"
+//             }
+//         }
+//     ]
+// }

@@ -18,10 +18,13 @@ builder.Services.AddOpenApi();
 builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
 builder.Services.AddProblemDetails();
 
+builder.Services.AddServiceDiscovery();
+
 builder.Services.AddHttpClient("WebhookClient", client =>
 {
     client.Timeout = TimeSpan.FromSeconds(30);
-});
+})
+.AddServiceDiscovery();
 
 builder.Services.AddDbContext<WebhooksDbContext>(options =>
 {

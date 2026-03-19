@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Webhooks.API.Data;
 using Webhooks.API.Dtos;
 using Webhooks.API.Models;
@@ -33,6 +34,24 @@ public class WebhooksController : ControllerBase
         await _dbContext.SaveChangesAsync();
 
         return Ok(newSubscription);
+    }
+
+    [HttpGet("subscriptions")]
+    public async Task<IActionResult> GetSubscriptions()
+    {
+        return Ok(await _dbContext.WebhookSubscriptions.ToListAsync());
+    }
+
+    [HttpGet("delivery-attempts/{id}")]
+    public async Task<IActionResult> GetDeliveryAttempts([FromQuery] bool? success, [FromRoute] int id)
+    {
+        var query = _dbContext.WebhookDeliveryAttempts.AsQueryable();
+        if (success.HasValue)
+            query = query
+                .Where(d => d.Id == id)
+                .Where(da => da.Success == success.Value);
+        
+        return Ok(await query.ToListAsync());
     }
 
     [HttpPost("publish")]
