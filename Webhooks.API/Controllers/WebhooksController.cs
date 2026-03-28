@@ -20,7 +20,7 @@ public class WebhooksController : ControllerBase
         _webhookDispatcher = webhookDispatcher;
     }
 
-    [HttpPost("subscribtions")]
+    [HttpPost("subscriptions")]
     public async Task<IActionResult> CreateSubscription([FromBody] CreateWebhookRequest request)
     {
         WebhookSubscription newSubscription = new()
