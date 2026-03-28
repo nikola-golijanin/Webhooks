@@ -24,7 +24,7 @@ public class WebhooksControllerTests : BaseIntegrationTest
 
 
         // Act
-        var response = await client.PostAsJsonAsync("/api/webhooks/subscribtions", request);
+        var response = await client.PostAsJsonAsync("/api/webhooks/subscriptions", request);
 
         // Assert
         response.EnsureSuccessStatusCode();
